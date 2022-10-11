@@ -1,4 +1,4 @@
-# COMP3000
+# Plant Care App (COMP3000)
 
 ### Project Title
 Plant Care App using Image Recognition
