@@ -28,7 +28,7 @@ import java.nio.ByteOrder;
 
 public class ClassifyActivity extends AppCompatActivity {
 
-    Button camera, gallery;
+    Button camera, gallery, register;
     ImageView imageView;
     TextView result;
     int imageSize = 224;
@@ -40,9 +40,17 @@ public class ClassifyActivity extends AppCompatActivity {
 
         camera = findViewById(R.id.button);
         gallery = findViewById(R.id.button2);
+        register = findViewById(R.id.register_button);
 
         result = findViewById(R.id.result);
         imageView = findViewById(R.id.imageView);
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openRegisterActivity();
+            }
+        });
 
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +73,11 @@ public class ClassifyActivity extends AppCompatActivity {
                 startActivityForResult(cameraIntent, 1);
             }
         });
+    }
+
+    public void openRegisterActivity() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
     }
 
     public void classifyImage(Bitmap image){
