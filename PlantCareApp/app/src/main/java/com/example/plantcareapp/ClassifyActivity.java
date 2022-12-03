@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.plantcareapp.ml.Model;
+import com.example.plantcareapp.ml.Plantmodel;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
@@ -82,7 +83,8 @@ public class ClassifyActivity extends AppCompatActivity {
 
     public void classifyImage(Bitmap image){
         try {
-            Model model = Model.newInstance(getApplicationContext());
+            //Model model = Model.newInstance(getApplicationContext());
+            Plantmodel model = Plantmodel.newInstance(getApplicationContext());
 
             // Creates inputs for reference.
             TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
@@ -106,7 +108,7 @@ public class ClassifyActivity extends AppCompatActivity {
             inputFeature0.loadBuffer(byteBuffer);
 
             // Runs model inference and gets result.
-            Model.Outputs outputs = model.process(inputFeature0);
+            Plantmodel.Outputs outputs = model.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
             float [] confidences = outputFeature0.getFloatArray();
@@ -120,7 +122,7 @@ public class ClassifyActivity extends AppCompatActivity {
                 }
             }
 
-            String [] classes = {"Chinese", "Dragon", "Orchid", "Rubber", "Snake"};
+            String [] classes = {"Boston Fern", "Bunny Ear Cactus", "Chinese Money Plant", "Dragon Tree", "Jade Plant", "Orchid", "Peace Lily", "Peacock Plant",  "Rubber Plant", "Snake Plant"};
             result.setText(classes[maxPos]);
 
             // Releases model resources if no longer used.
