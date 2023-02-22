@@ -1,0 +1,53 @@
+package com.example.plantcareapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+public class PlantInformationActivity extends AppCompatActivity {
+
+    TextView name, botanical, temperature, water, sunlight, humidity;
+    ImageView plantImage;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_plant_information);
+
+        //information = findViewById(R.id.info);
+        name = findViewById(R.id.title);
+        botanical = findViewById(R.id.botanical);
+        temperature = findViewById(R.id.temperature);
+        water = findViewById(R.id.water);
+        sunlight = findViewById(R.id.sunlight);
+        humidity = findViewById(R.id.humidity);
+        plantImage=findViewById(R.id.imageView);
+
+
+        Bundle extras=getIntent().getExtras();
+        String plantName=extras.getString("name");
+        String plantBotanical=extras.getString("botanical");
+        String plantTemperature=extras.getString("temperature");
+        String plantWater=extras.getString("water");
+        String plantSunlight=extras.getString("sunlight");
+        String plantHumidity=extras.getString("humidity");
+        String plantURL = extras.getString("url");
+
+        //String url = "https://www.tutorialspoint.com/images/tp-logo-diamond.png";
+        Glide.with(this)
+                .load(plantURL)
+                .into(plantImage);
+
+        name.setText(plantName);
+        botanical.setText(plantBotanical);
+        temperature.setText(plantTemperature);
+        water.setText(plantWater);
+        sunlight.setText(plantSunlight);
+        humidity.setText(plantHumidity);
+
+    }
+}

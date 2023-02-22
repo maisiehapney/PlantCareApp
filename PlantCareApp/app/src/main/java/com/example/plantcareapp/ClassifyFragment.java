@@ -1,8 +1,5 @@
 package com.example.plantcareapp;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,14 +8,19 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.plantcareapp.ml.Model;
 import com.example.plantcareapp.ml.Plantmodel;
 
 import org.tensorflow.lite.DataType;
@@ -28,29 +30,40 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class ClassifyActivity extends AppCompatActivity {
+public class ClassifyFragment extends Fragment {
 
-    Button camera, gallery, register;
+    Button camera, gallery, information;
     ImageView imageView;
     TextView result;
     int imageSize = 224;
+    private String species;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_classify);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v=inflater.inflate(R.layout.fragment_classify,container,false);
 
-        camera = findViewById(R.id.button);
-        gallery = findViewById(R.id.button2);
-        register = findViewById(R.id.register_button);
+        camera = v.findViewById(R.id.button);
+        gallery = v.findViewById(R.id.button2);
+        information = v.findViewById(R.id.information_button);
 
-        result = findViewById(R.id.result);
-        imageView = findViewById(R.id.imageView);
+        result = v.findViewById(R.id.result);
+        imageView = v.findViewById(R.id.imageView);
 
-        register.setOnClickListener(new View.OnClickListener() {
+        information.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openRegisterActivity();
+                Intent intent = new Intent (getActivity(), PlantInformationActivity.class);
+                int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(species);
+                intent.putExtra("name",((HomeActivity) getActivity()).getNames().get(plantIndex));
+                intent.putExtra("botanical",((HomeActivity) getActivity()).getBotanicalNames().get(plantIndex));
+                intent.putExtra("temperature",((HomeActivity) getActivity()).getTemperature().get(plantIndex));
+                intent.putExtra("water",((HomeActivity) getActivity()).getWater().get(plantIndex));
+                intent.putExtra("sunlight",((HomeActivity) getActivity()).getSunlight().get(plantIndex));
+                intent.putExtra("humidity",((HomeActivity) getActivity()).getHumidity().get(plantIndex));
+                intent.putExtra("url",((HomeActivity) getActivity()).getImageURL().get(plantIndex));
+                getActivity().startActivity(intent);
+
             }
         });
 
@@ -58,7 +71,7 @@ public class ClassifyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                    if(getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(cameraIntent, 3);
                     }else{
@@ -75,17 +88,15 @@ public class ClassifyActivity extends AppCompatActivity {
                 startActivityForResult(cameraIntent, 1);
             }
         });
-    }
+        // Inflate the layout for this fragment
 
-    public void openRegisterActivity() {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+        return v;
     }
 
     public void classifyImage(Bitmap image){
         try {
             //Model model = Model.newInstance(getApplicationContext());
-            Plantmodel model = Plantmodel.newInstance(getApplicationContext());
+            Plantmodel model = Plantmodel.newInstance(getActivity().getApplicationContext());
 
             // Creates inputs for reference.
             TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
@@ -126,6 +137,10 @@ public class ClassifyActivity extends AppCompatActivity {
             String [] classes = {"Boston Fern", "Bunny Ear Cactus", "Chinese Money Plant", "Dragon Tree", "Jade Plant", "Orchid", "Peace Lily", "Peacock Plant",  "Rubber Plant", "Snake Plant"};
             result.setText(classes[maxPos]);
 
+            species = classes[maxPos];
+            //int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(classes[maxPos]);
+            //Log.d("tag", ((HomeActivity) getActivity()).getInfo().get(plantIndex));
+
             // Releases model resources if no longer used.
             model.close();
         } catch (IOException e) {
@@ -134,8 +149,8 @@ public class ClassifyActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode == RESULT_OK){
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == getActivity().RESULT_OK){
             if(requestCode==3){
                 Bitmap image = (Bitmap) data.getExtras().get("data");
                 int dimension = Math.min(image.getWidth(), image.getHeight());
@@ -148,7 +163,7 @@ public class ClassifyActivity extends AppCompatActivity {
                 Uri dat = data.getData();
                 Bitmap image = null;
                 try {
-                    image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
+                    image = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), dat);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
