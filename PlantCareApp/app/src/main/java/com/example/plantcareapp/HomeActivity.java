@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
-        db.collection("Plants")
+        db.collection("Plants").orderBy("name")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -105,9 +105,11 @@ public class HomeActivity extends AppCompatActivity {
                                 plantImageURL.add(document.getString("imageURL"));
 
                                 Log.d("tag", document.getId() + " => " + document.getData());
-                                Toast.makeText(HomeActivity.this, "Got data",
-                                        Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(HomeActivity.this, "Got data",
+                                        //Toast.LENGTH_SHORT).show();
                             }
+                            Toast.makeText(HomeActivity.this, "Got data",
+                                    Toast.LENGTH_SHORT).show();
                         } else {
                             Log.w("tag", "Error getting documents.", task.getException());
                         }
