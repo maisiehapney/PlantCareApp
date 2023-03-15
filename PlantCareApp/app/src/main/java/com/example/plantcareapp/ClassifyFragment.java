@@ -34,7 +34,7 @@ public class ClassifyFragment extends Fragment {
 
     Button camera, gallery, information;
     ImageView imageView;
-    TextView result;
+    TextView result, confidence;
     int imageSize = 224;
     private String species;
 
@@ -48,7 +48,10 @@ public class ClassifyFragment extends Fragment {
         information = v.findViewById(R.id.information_button);
 
         result = v.findViewById(R.id.result);
+        confidence = v.findViewById(R.id.confidence);
         imageView = v.findViewById(R.id.imageView);
+
+        information.setVisibility(View.INVISIBLE);
 
         information.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +94,19 @@ public class ClassifyFragment extends Fragment {
         // Inflate the layout for this fragment
 
         return v;
+    }
+
+    private void getAccuracy(float percent){
+        String accuracy;
+        if(percent>=0.75){
+            accuracy = "High";
+        }else if(percent<0.75 && percent>=0.50){
+            accuracy="Moderate";
+        }
+        else{
+            accuracy="Low";
+        }
+        confidence.setText("Confidence: "+ accuracy);
     }
 
     public void classifyImage(Bitmap image){
@@ -136,7 +152,9 @@ public class ClassifyFragment extends Fragment {
 
             String [] classes = {"Boston Fern", "Bunny Ear Cactus", "Chinese Money Plant", "Dragon Tree", "Jade Plant", "Orchid", "Peace Lily", "Peacock Plant",  "Rubber Plant", "Snake Plant"};
             result.setText(classes[maxPos]);
-
+            //information.setText("More Information");
+            information.setVisibility(View.VISIBLE);
+            getAccuracy(maxConfidence);
             species = classes[maxPos];
             //int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(classes[maxPos]);
             //Log.d("tag", ((HomeActivity) getActivity()).getInfo().get(plantIndex));

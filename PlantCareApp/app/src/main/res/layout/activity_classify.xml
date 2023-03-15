@@ -43,6 +43,7 @@
             android:layout_width="320sp"
             android:layout_height="320sp"
             android:elevation="2dp"
+            android:src="@drawable/placeholder"
             app:layout_constraintTop_toTopOf="@+id/card"
             app:layout_constraintLeft_toLeftOf="@+id/card"
             app:layout_constraintRight_toRightOf="@+id/card"

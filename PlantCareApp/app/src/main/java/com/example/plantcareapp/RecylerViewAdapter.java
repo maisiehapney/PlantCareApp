@@ -1,11 +1,14 @@
 package com.example.plantcareapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +39,17 @@ public class RecylerViewAdapter extends RecyclerView.Adapter<RecylerViewAdapter.
         this.context = context;
     }
 
+    public void setFilteredPlants(List<String> newPlantNames, List<String> newPlantBotanical, List<String> newPlantTemperature, List<String> newPlantWater, List<String> newPlantSunlight, List<String> newPlantHumidity, List<String> newPlantImageURL){
+        this.plantNames = newPlantNames;
+        this.plantBotanical=newPlantBotanical;
+        this.plantTemperature=newPlantTemperature;
+        this.plantWater=newPlantWater;
+        this.plantSunlight=newPlantSunlight;
+        this.plantHumidity=newPlantHumidity;
+        this.plantImageURL=newPlantImageURL;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,6 +64,23 @@ public class RecylerViewAdapter extends RecyclerView.Adapter<RecylerViewAdapter.
         Glide.with(context)
                 .load(plantImageURL.get(position))
                 .into(holder.imageView);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pos = holder.getAdapterPosition();
+
+                Intent intent = new Intent(context, PlantInformationActivity.class);
+                intent.putExtra("name",plantNames.get(pos));
+                intent.putExtra("botanical",plantBotanical.get(pos));
+                intent.putExtra("temperature",plantTemperature.get(pos));
+                intent.putExtra("water",plantWater.get(pos));
+                intent.putExtra("sunlight",plantSunlight.get(pos));
+                intent.putExtra("humidity",plantHumidity.get(pos));
+                intent.putExtra("url",plantImageURL.get(pos));
+                context.startActivity(intent);
+
+            }
+        });
 
     }
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     HomeFragment homeFragment = new HomeFragment();
     ProfileFragment profileFragment = new ProfileFragment();
     ClassifyFragment classifyFragment = new ClassifyFragment();
+    ProgressBar progressBar;
     private List<String> plantNames;
     private List<String> plantBotanical;
     private List<String> plantTemperature;
@@ -53,8 +55,9 @@ public class HomeActivity extends AppCompatActivity {
 
         navigationView = findViewById(R.id.bottomNavigationView);
         navigationView.setSelectedItemId(R.id.home);
+        progressBar=findViewById(R.id.progressBar);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
+       /* getSupportFragmentManager().beginTransaction().replace(R.id.frame, classifyFragment).commit();
 
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -72,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 return false;
             }
-        });
+        });*/
 
         plantNames = new ArrayList<>();
         plantBotanical = new ArrayList<>();
@@ -88,6 +91,8 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
 
         }
+
+        progressBar.setVisibility(View.VISIBLE);
 
         db.collection("Plants").orderBy("name")
                 .get()
@@ -110,11 +115,34 @@ public class HomeActivity extends AppCompatActivity {
                             }
                             Toast.makeText(HomeActivity.this, "Got data",
                                     Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                            getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
                         } else {
+                            progressBar.setVisibility(View.GONE);
                             Log.w("tag", "Error getting documents.", task.getException());
                         }
                     }
                 });
+
+        //getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
+
+        navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.home:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
+                        return true;
+                    case R.id.scan:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame, classifyFragment).commit();
+                        return true;
+                    case R.id.profile:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame, profileFragment).commit();
+                        return true;
+                }
+                return false;
+            }
+        });
 
 
     }
