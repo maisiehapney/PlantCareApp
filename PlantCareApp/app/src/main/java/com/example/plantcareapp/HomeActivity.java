@@ -113,13 +113,16 @@ public class HomeActivity extends AppCompatActivity {
                                 //Toast.makeText(HomeActivity.this, "Got data",
                                         //Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(HomeActivity.this, "Got data",
-                                    Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(HomeActivity.this, "Got data",
+                                    //Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
                         } else {
                             progressBar.setVisibility(View.GONE);
-                            Log.w("tag", "Error getting documents.", task.getException());
+                            Toast.makeText(HomeActivity.this, "Connect to internet and try again.",
+                                    Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });
