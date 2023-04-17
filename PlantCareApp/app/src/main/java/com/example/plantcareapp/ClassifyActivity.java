@@ -34,6 +34,7 @@ public class ClassifyActivity extends AppCompatActivity {
     ImageView imageView;
     TextView result;
     int imageSize = 224;
+    private String plant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,12 @@ public class ClassifyActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openNewActivity(){
+        Intent intent = new Intent (this, PlantInformationActivity.class);
+        intent.putExtra("name",plant);
+        this.startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode == RESULT_OK){
@@ -94,7 +101,9 @@ public class ClassifyActivity extends AppCompatActivity {
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
                 //classifyImage(image);
                 Classify.classifyImage(image, getApplicationContext());
+                plant = Classify.result;
                 result.setText(Classify.result);
+                openNewActivity();
             }else{
                 Uri dat = data.getData();
                 Bitmap image = null;
@@ -108,7 +117,9 @@ public class ClassifyActivity extends AppCompatActivity {
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
                 //classifyImage(image);
                 Classify.classifyImage(image, getApplicationContext());
+                plant = Classify.result;
                 result.setText(Classify.result);
+                openNewActivity();
 
             }
         }

@@ -51,25 +51,6 @@ public class ClassifyFragment extends Fragment {
         confidence = v.findViewById(R.id.confidence);
         imageView = v.findViewById(R.id.imageView);
 
-        /*information.setVisibility(View.INVISIBLE);
-
-        information.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent (getActivity(), PlantInformationActivity.class);
-                int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(species);
-                intent.putExtra("name",((HomeActivity) getActivity()).getNames().get(plantIndex));
-                intent.putExtra("botanical",((HomeActivity) getActivity()).getBotanicalNames().get(plantIndex));
-                intent.putExtra("temperature",((HomeActivity) getActivity()).getTemperature().get(plantIndex));
-                intent.putExtra("water",((HomeActivity) getActivity()).getWater().get(plantIndex));
-                intent.putExtra("sunlight",((HomeActivity) getActivity()).getSunlight().get(plantIndex));
-                intent.putExtra("humidity",((HomeActivity) getActivity()).getHumidity().get(plantIndex));
-                intent.putExtra("url",((HomeActivity) getActivity()).getImageURL().get(plantIndex));
-                getActivity().startActivity(intent);
-
-            }
-        });*/
-
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,19 +89,6 @@ public class ClassifyFragment extends Fragment {
         intent.putExtra("url",((HomeActivity) getActivity()).getImageURL().get(plantIndex));
         intent.putExtra("confidence",percent);
         getActivity().startActivity(intent);
-    }
-
-    private void getAccuracy(float percent){
-        String accuracy;
-        if(percent>=0.75){
-            accuracy = "High";
-        }else if(percent<0.75 && percent>=0.50){
-            accuracy="Moderate";
-        }
-        else{
-            accuracy="Low";
-        }
-        confidence.setText("Confidence: "+ accuracy);
     }
 
     @Override

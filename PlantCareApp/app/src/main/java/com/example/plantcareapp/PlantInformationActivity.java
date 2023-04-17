@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 
 public class PlantInformationActivity extends AppCompatActivity {
 
-    TextView name, botanical, temperature, water, sunlight, humidity, confidence;
+    TextView name, botanical, temperature, water, sunlight, humidity, confidence, loginInfo, identification;
     ImageView plantImage;
 
     @Override
@@ -28,6 +28,8 @@ public class PlantInformationActivity extends AppCompatActivity {
         humidity = findViewById(R.id.humidity);
         plantImage=findViewById(R.id.imageView);
         confidence=findViewById(R.id.confidence);
+        loginInfo=findViewById(R.id.loginInformation);
+        identification=findViewById(R.id.identification);
 
 
         Bundle extras=getIntent().getExtras();
@@ -41,12 +43,38 @@ public class PlantInformationActivity extends AppCompatActivity {
         String plantConfidence = extras.getString("confidence");
 
         //String url = "https://www.tutorialspoint.com/images/tp-logo-diamond.png";
-        Glide.with(this)
+        /*Glide.with(this)
                 .load(plantURL)
-                .into(plantImage);
+                .into(plantImage);*/
 
         name.setText(plantName);
-        botanical.setText(plantBotanical);
+        if(plantBotanical!=null && plantTemperature!=null && plantWater!=null && plantSunlight!=null &&plantHumidity!=null &&plantURL!=null){
+            Glide.with(this)
+                    .load(plantURL)
+                    .into(plantImage);
+            botanical.setText(plantBotanical);
+            temperature.setText(plantTemperature);
+            water.setText(plantWater);
+            sunlight.setText(plantSunlight);
+            humidity.setText(plantHumidity);
+            if (plantConfidence != null){
+                confidence.setText("Confidence: "+plantConfidence);
+                confidence.setVisibility(View.VISIBLE);
+                //name.setText("Identified as: " + plantName);
+                identification.setText("Identified as: "+plantName);
+                identification.setVisibility(View.VISIBLE);
+            }
+            else{
+                confidence.setVisibility(View.GONE);
+                //name.setText(plantName);
+            }
+        }else{
+            loginInfo.setVisibility(View.VISIBLE);
+            //name.setText("Identified as: " + plantName);
+            identification.setText("Identified as: "+plantName);
+            identification.setVisibility(View.VISIBLE);
+        }
+        /*botanical.setText(plantBotanical);
         temperature.setText(plantTemperature);
         water.setText(plantWater);
         sunlight.setText(plantSunlight);
@@ -57,7 +85,7 @@ public class PlantInformationActivity extends AppCompatActivity {
         }
         else{
             confidence.setVisibility(View.GONE);
-        }
+        }*/
 
     }
 }
