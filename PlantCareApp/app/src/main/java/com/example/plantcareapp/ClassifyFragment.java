@@ -36,7 +36,7 @@ public class ClassifyFragment extends Fragment {
     ImageView imageView;
     TextView result, confidence;
     int imageSize = 224;
-    private String species;
+    private String species, percent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,13 +45,13 @@ public class ClassifyFragment extends Fragment {
 
         camera = v.findViewById(R.id.button);
         gallery = v.findViewById(R.id.button2);
-        information = v.findViewById(R.id.information_button);
+        //information = v.findViewById(R.id.information_button);
 
         result = v.findViewById(R.id.result);
         confidence = v.findViewById(R.id.confidence);
         imageView = v.findViewById(R.id.imageView);
 
-        information.setVisibility(View.INVISIBLE);
+        /*information.setVisibility(View.INVISIBLE);
 
         information.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +68,7 @@ public class ClassifyFragment extends Fragment {
                 getActivity().startActivity(intent);
 
             }
-        });
+        });*/
 
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +96,20 @@ public class ClassifyFragment extends Fragment {
         return v;
     }
 
+    public void openNewActivity(){
+        Intent intent = new Intent (getActivity(), PlantInformationActivity.class);
+        int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(species);
+        intent.putExtra("name",((HomeActivity) getActivity()).getNames().get(plantIndex));
+        intent.putExtra("botanical",((HomeActivity) getActivity()).getBotanicalNames().get(plantIndex));
+        intent.putExtra("temperature",((HomeActivity) getActivity()).getTemperature().get(plantIndex));
+        intent.putExtra("water",((HomeActivity) getActivity()).getWater().get(plantIndex));
+        intent.putExtra("sunlight",((HomeActivity) getActivity()).getSunlight().get(plantIndex));
+        intent.putExtra("humidity",((HomeActivity) getActivity()).getHumidity().get(plantIndex));
+        intent.putExtra("url",((HomeActivity) getActivity()).getImageURL().get(plantIndex));
+        intent.putExtra("confidence",percent);
+        getActivity().startActivity(intent);
+    }
+
     private void getAccuracy(float percent){
         String accuracy;
         if(percent>=0.75){
@@ -109,63 +123,6 @@ public class ClassifyFragment extends Fragment {
         confidence.setText("Confidence: "+ accuracy);
     }
 
-    public void classifyImage(Bitmap image){
-        try {
-            //Model model = Model.newInstance(getApplicationContext());
-            Plantmodel model = Plantmodel.newInstance(getActivity().getApplicationContext());
-
-            // Creates inputs for reference.
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
-            byteBuffer.order(ByteOrder.nativeOrder());
-
-            int [] intValues = new int[imageSize *imageSize];
-            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
-            int pixel = 0;
-
-            for (int i = 0; i<imageSize; i++){
-                for (int j=0; j<imageSize; j++){
-                    int val = intValues[pixel++];
-                    byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 1));
-                    byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 1));
-                    byteBuffer.putFloat((val & 0xFF) * (1.f / 1));
-                }
-            }
-
-
-            inputFeature0.loadBuffer(byteBuffer);
-
-            // Runs model inference and gets result.
-            Plantmodel.Outputs outputs = model.process(inputFeature0);
-            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
-
-            float [] confidences = outputFeature0.getFloatArray();
-
-            int maxPos = 0;
-            float maxConfidence = 0;
-            for (int i = 0; i < confidences.length; i++) {
-                if (confidences[i] > maxConfidence) {
-                    maxConfidence = confidences[i];
-                    maxPos = i;
-                }
-            }
-
-            String [] classes = {"Boston Fern", "Bunny Ear Cactus", "Chinese Money Plant", "Dragon Tree", "Jade Plant", "Orchid", "Peace Lily", "Peacock Plant",  "Rubber Plant", "Snake Plant"};
-            result.setText(classes[maxPos]);
-            //information.setText("More Information");
-            information.setVisibility(View.VISIBLE);
-            getAccuracy(maxConfidence);
-            species = classes[maxPos];
-            //int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(classes[maxPos]);
-            //Log.d("tag", ((HomeActivity) getActivity()).getInfo().get(plantIndex));
-
-            // Releases model resources if no longer used.
-            model.close();
-        } catch (IOException e) {
-            // TODO Handle the exception
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode == getActivity().RESULT_OK){
@@ -173,10 +130,13 @@ public class ClassifyFragment extends Fragment {
                 Bitmap image = (Bitmap) data.getExtras().get("data");
                 int dimension = Math.min(image.getWidth(), image.getHeight());
                 image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
-                imageView.setImageBitmap(image);
-
+                //imageView.setImageBitmap(image);
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-                classifyImage(image);
+                //classifyImage(image);
+                Classify.classifyImage(image, getActivity().getApplicationContext());
+                species=Classify.result;
+                percent = Classify.accuracy;
+                openNewActivity();
             }else{
                 Uri dat = data.getData();
                 Bitmap image = null;
@@ -185,10 +145,15 @@ public class ClassifyFragment extends Fragment {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                imageView.setImageBitmap(image);
+                //imageView.setImageBitmap(image);
 
                 image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-                classifyImage(image);
+                //classifyImage(image);
+                Classify.classifyImage(image, getActivity().getApplicationContext());
+                species=Classify.result;
+                //confidence.setText("Confidence: "+ Classify.accuracy);
+                percent = Classify.accuracy;
+                openNewActivity();
 
             }
         }

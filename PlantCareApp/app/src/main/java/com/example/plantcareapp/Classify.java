@@ -1,0 +1,89 @@
+package com.example.plantcareapp;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+
+import com.example.plantcareapp.ml.Plantmodel;
+
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+public class Classify {
+    private static int imageSize =224;
+    public static String result, accuracy;
+
+    public static void classifyImage(Bitmap image, Context ctx){
+        try {
+            //Model model = Model.newInstance(getApplicationContext());
+            Plantmodel model = Plantmodel.newInstance(ctx);
+
+            // Creates inputs for reference.
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
+            byteBuffer.order(ByteOrder.nativeOrder());
+
+            int [] intValues = new int[imageSize *imageSize];
+            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
+            int pixel = 0;
+
+            for (int i = 0; i<imageSize; i++){
+                for (int j=0; j<imageSize; j++){
+                    int val = intValues[pixel++];
+                    byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 1));
+                    byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 1));
+                    byteBuffer.putFloat((val & 0xFF) * (1.f / 1));
+                }
+            }
+
+
+            inputFeature0.loadBuffer(byteBuffer);
+
+            // Runs model inference and gets result.
+            Plantmodel.Outputs outputs = model.process(inputFeature0);
+            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+
+            float [] confidences = outputFeature0.getFloatArray();
+
+            int maxPos = 0;
+            float maxConfidence = 0;
+            for (int i = 0; i < confidences.length; i++) {
+                if (confidences[i] > maxConfidence) {
+                    maxConfidence = confidences[i];
+                    maxPos = i;
+                }
+            }
+
+            String [] classes = {"Boston Fern", "Bunny Ear Cactus", "Chinese Money Plant", "Dragon Tree", "Jade Plant", "Orchid", "Peace Lily", "Peacock Plant",  "Rubber Plant", "Snake Plant"};
+            result = (classes[maxPos]);
+            getAccuracy(maxConfidence);
+            //information.setText("More Information");
+            //information.setVisibility(View.VISIBLE);
+            //getAccuracy(maxConfidence);
+            //species = classes[maxPos];
+            //int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(classes[maxPos]);
+            //Log.d("tag", ((HomeActivity) getActivity()).getInfo().get(plantIndex));
+
+            // Releases model resources if no longer used.
+            model.close();
+        } catch (IOException e) {
+            // TODO Handle the exception
+        }
+    }
+
+    public static void getAccuracy(float percent){
+        if(percent>=0.75){
+            accuracy = "High";
+        }else if(percent<0.75 && percent>=0.50){
+            accuracy="Moderate";
+        }
+        else{
+            accuracy="Low";
+        }
+    }
+
+
+}

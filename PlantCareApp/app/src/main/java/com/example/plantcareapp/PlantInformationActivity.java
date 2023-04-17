@@ -3,6 +3,7 @@ package com.example.plantcareapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,7 +11,7 @@ import com.bumptech.glide.Glide;
 
 public class PlantInformationActivity extends AppCompatActivity {
 
-    TextView name, botanical, temperature, water, sunlight, humidity;
+    TextView name, botanical, temperature, water, sunlight, humidity, confidence;
     ImageView plantImage;
 
     @Override
@@ -26,6 +27,7 @@ public class PlantInformationActivity extends AppCompatActivity {
         sunlight = findViewById(R.id.sunlight);
         humidity = findViewById(R.id.humidity);
         plantImage=findViewById(R.id.imageView);
+        confidence=findViewById(R.id.confidence);
 
 
         Bundle extras=getIntent().getExtras();
@@ -36,6 +38,7 @@ public class PlantInformationActivity extends AppCompatActivity {
         String plantSunlight=extras.getString("sunlight");
         String plantHumidity=extras.getString("humidity");
         String plantURL = extras.getString("url");
+        String plantConfidence = extras.getString("confidence");
 
         //String url = "https://www.tutorialspoint.com/images/tp-logo-diamond.png";
         Glide.with(this)
@@ -48,6 +51,13 @@ public class PlantInformationActivity extends AppCompatActivity {
         water.setText(plantWater);
         sunlight.setText(plantSunlight);
         humidity.setText(plantHumidity);
+        if (plantConfidence != null){
+            confidence.setText("Confidence: "+plantConfidence);
+            confidence.setVisibility(View.VISIBLE);
+        }
+        else{
+            confidence.setVisibility(View.GONE);
+        }
 
     }
 }
