@@ -56,7 +56,7 @@
             android:layout_width="280sp"
             android:layout_height="wrap_content"
             android:elevation="2dp"
-            android:text="Login to access full features, including a confidence score, plant care guides and images."
+            android:text="Login to unlock full features, including a confidence score, plant care guides, images and more."
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="20sp"

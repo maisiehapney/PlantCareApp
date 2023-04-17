@@ -36,13 +36,15 @@ public class HomeActivity extends AppCompatActivity {
     ProfileFragment profileFragment = new ProfileFragment();
     ClassifyFragment classifyFragment = new ClassifyFragment();
     ProgressBar progressBar;
-    private List<String> plantNames;
+    /*private List<String> plantNames;
     private List<String> plantBotanical;
     private List<String> plantTemperature;
     private List<String> plantWater;
     private List<String> plantSunlight;
     private List<String> plantHumidity;
-    private List<String> plantImageURL;
+    private List<String> plantImageURL;*/
+    ArrayList<Plant> plantArrayList;
+    private List<String> plantNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +80,14 @@ public class HomeActivity extends AppCompatActivity {
         });*/
 
         plantNames = new ArrayList<>();
+        /*plantNames = new ArrayList<>();
         plantBotanical = new ArrayList<>();
         plantTemperature = new ArrayList<>();
         plantWater = new ArrayList<>();
         plantSunlight = new ArrayList<>();
         plantHumidity = new ArrayList<>();
-        plantImageURL = new ArrayList<>();
+        plantImageURL = new ArrayList<>();*/
+        plantArrayList=new ArrayList<Plant>();
 
         //Might not need this
         if(user==null){
@@ -101,13 +105,23 @@ public class HomeActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                plantNames.add(document.getString("name"));
+                                /*plantNames.add(document.getString("name"));
                                 plantBotanical.add(document.getString("botanicalName"));
                                 plantTemperature.add(document.getString("temperature"));
                                 plantWater.add(document.getString("water"));
                                 plantSunlight.add(document.getString("sunlight"));
                                 plantHumidity.add(document.getString("humidity"));
-                                plantImageURL.add(document.getString("imageURL"));
+                                plantImageURL.add(document.getString("imageURL"));*/
+                                String plantName = document.getString("name");
+                                String plantBotanical = document.getString("botanicalName");
+                                String plantTemperature = document.getString("temperature");
+                                String plantWater = document.getString("water");
+                                String plantSunlight = document.getString("sunlight");
+                                String plantHumidity = document.getString("humidity");
+                                String plantImageURL = document.getString("imageURL");
+
+                                plantNames.add(plantName);
+                                plantArrayList.add(new Plant(plantName, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL));
 
                                 Log.d("tag", document.getId() + " => " + document.getData());
                                 //Toast.makeText(HomeActivity.this, "Got data",
@@ -150,7 +164,15 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    public ArrayList<Plant> getPlantArrayList() {
+        return plantArrayList;
+    }
+
     public List<String> getNames() {
+        return plantNames;
+    }
+
+    /* public List<String> getNames() {
         return plantNames;
     }
 
@@ -176,5 +198,5 @@ public class HomeActivity extends AppCompatActivity {
 
     public List<String> getImageURL() {
         return plantImageURL;
-    }
+    }*/
 }

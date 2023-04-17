@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,13 +25,16 @@ public class HomeFragment extends Fragment {
     RecylerViewAdapter recyclerViewAdapter;
     //private SearchView searchView;
     private androidx.appcompat.widget.SearchView searchView;
-    private List<String> plantNames;
+   /* private List<String> plantNames;
     private List<String> plantBotanical;
     private List<String> plantTemperature;
     private List<String> plantWater;
     private List<String> plantSunlight;
     private List<String> plantHumidity;
-    private List<String> plantImageURL;
+    private List<String> plantImageURL;*/
+    ArrayList<Plant> plantArrayList;
+    private List<String> plantNames;
+    TextView noResults;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,13 +46,15 @@ public class HomeFragment extends Fragment {
         layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);*/
 
-        plantNames=((HomeActivity) getActivity()).getNames();
+        /*plantNames=((HomeActivity) getActivity()).getNames();
         plantBotanical=((HomeActivity) getActivity()).getBotanicalNames();
         plantTemperature=((HomeActivity) getActivity()).getTemperature();
         plantWater=((HomeActivity) getActivity()).getWater();
         plantSunlight=((HomeActivity) getActivity()).getSunlight();
         plantHumidity=((HomeActivity) getActivity()).getHumidity();
-        plantImageURL=((HomeActivity) getActivity()).getImageURL();
+        plantImageURL=((HomeActivity) getActivity()).getImageURL();*/
+        plantArrayList=((HomeActivity) getActivity()).getPlantArrayList();
+        plantNames=((HomeActivity) getActivity()).getNames();
 
        /* recyclerViewAdapter = new RecylerViewAdapter(plantNames, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL, getActivity());
 
@@ -62,6 +68,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        noResults = view.findViewById(R.id.noSearchResults);
         recyclerView = view.findViewById(R.id.recyclerView);
         layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
@@ -78,6 +85,7 @@ public class HomeFragment extends Fragment {
                 filterPlants(newText);
                 return true;
             }
+
         });
 
         //plantNames=((HomeActivity) getActivity()).getNames();
@@ -88,7 +96,9 @@ public class HomeFragment extends Fragment {
         //plantHumidity=((HomeActivity) getActivity()).getHumidity();
         //plantImageURL=((HomeActivity) getActivity()).getImageURL();
 
-        recyclerViewAdapter = new RecylerViewAdapter(plantNames, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL, getActivity());
+        //recyclerViewAdapter = new RecylerViewAdapter(plantNames, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL, getActivity());
+
+        recyclerViewAdapter = new RecylerViewAdapter(getActivity(), plantArrayList);
 
         recyclerView.setAdapter(recyclerViewAdapter);
 
@@ -96,7 +106,7 @@ public class HomeFragment extends Fragment {
 
 
     }
-    private void filterPlants(String text){
+   /* private void filterPlants(String text){
         List<String>updatedPlantNames = new ArrayList<>();
         List<String> updatedPlantBotanical= new ArrayList<>();
         List<String> updatedPlantTemperature= new ArrayList<>();
@@ -124,5 +134,45 @@ public class HomeFragment extends Fragment {
             recyclerViewAdapter.setFilteredPlants(updatedPlantNames,updatedPlantBotanical,updatedPlantTemperature, updatedPlantWater,updatedPlantSunlight, updatedPlantHumidity, updatedPlantImageURL);
 
         }
+    }*/
+
+    private void filterPlants(String text){
+
+        List<Plant>updatedPlants = new ArrayList<>();
+
+        for (int i=0; i<plantNames.size(); i++){
+
+            if(plantNames.get(i).toLowerCase().contains(text.toLowerCase())){
+                updatedPlants.add(plantArrayList.get(i));
+            }
+        }
+        recyclerViewAdapter.setFilteredPlants(updatedPlants);
+
+        if (updatedPlants.size()<plantArrayList.size()){
+            noResults.setVisibility(View.VISIBLE);
+            noResults.setText(String.valueOf(updatedPlants.size())+" results found.");
+        }
+        else{
+            noResults.setVisibility(View.GONE);
+        }
+
+        /*recyclerViewAdapter.setFilteredPlants(updatedPlants);
+        if(updatedPlants.isEmpty()){
+            noResults.setVisibility(View.VISIBLE);
+        }
+        else{
+            //noResults.setVisibility(View.GONE);
+            noResults.setVisibility(View.VISIBLE);
+            noResults.setText(String.valueOf(updatedPlants.size())+" results found.");
+        }*/
+
+
+        /*if(updatedPlants.isEmpty()){
+            //Deal with
+        }
+        else{
+            recyclerViewAdapter.setFilteredPlants(updatedPlants);
+
+        }*/
     }
 }

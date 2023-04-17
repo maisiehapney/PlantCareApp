@@ -27,13 +27,27 @@
         app:queryHint="Search Here..."
         app:iconifiedByDefault="false"
         />
+
+    <TextView
+        android:id="@+id/noSearchResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search"
+        android:layout_centerHorizontal="true"
+        android:text="No result(s) found."
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        />
     
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recyclerView"
         android:scrollbars="vertical"
-        android:layout_below="@+id/search"
+        android:layout_below="@+id/noSearchResults"
         />
 
 </RelativeLayout>

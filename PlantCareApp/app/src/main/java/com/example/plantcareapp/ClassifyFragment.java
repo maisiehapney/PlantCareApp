@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.plantcareapp.ml.Plantmodel;
+import com.google.common.collect.Collections2;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
@@ -29,6 +30,9 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class ClassifyFragment extends Fragment {
 
@@ -77,7 +81,7 @@ public class ClassifyFragment extends Fragment {
         return v;
     }
 
-    public void openNewActivity(){
+    /*public void openNewActivity(){
         Intent intent = new Intent (getActivity(), PlantInformationActivity.class);
         int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(species);
         intent.putExtra("name",((HomeActivity) getActivity()).getNames().get(plantIndex));
@@ -87,6 +91,20 @@ public class ClassifyFragment extends Fragment {
         intent.putExtra("sunlight",((HomeActivity) getActivity()).getSunlight().get(plantIndex));
         intent.putExtra("humidity",((HomeActivity) getActivity()).getHumidity().get(plantIndex));
         intent.putExtra("url",((HomeActivity) getActivity()).getImageURL().get(plantIndex));
+        intent.putExtra("confidence",percent);
+        getActivity().startActivity(intent);
+    }*/
+    public void openNewActivity(){
+        Intent intent = new Intent (getActivity(), PlantInformationActivity.class);
+        int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(species);
+        Plant plant = ((HomeActivity) getActivity()).getPlantArrayList().get(plantIndex);
+        intent.putExtra("name",plant.name);
+        intent.putExtra("botanical",plant.botanicalName);
+        intent.putExtra("temperature",plant.temperature);
+        intent.putExtra("water",plant.water);
+        intent.putExtra("sunlight",plant.sunlight);
+        intent.putExtra("humidity",plant.humidity);
+        intent.putExtra("url",plant.imageURL);
         intent.putExtra("confidence",percent);
         getActivity().startActivity(intent);
     }
