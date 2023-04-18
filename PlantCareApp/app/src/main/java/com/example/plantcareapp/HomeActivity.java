@@ -47,6 +47,17 @@ public class HomeActivity extends AppCompatActivity {
     private List<String> plantNames;
 
     @Override
+    public void onBackPressed(){
+        if (navigationView.getSelectedItemId()==R.id.home){
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+        }else{
+            navigationView.setSelectedItemId(R.id.home);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);

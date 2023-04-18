@@ -68,8 +68,10 @@ public class RegisterActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
+
                                     Toast.makeText(RegisterActivity.this, "Registration Successful",
                                             Toast.LENGTH_SHORT).show();
+
                                     Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
                                     startActivity(intent);
 
