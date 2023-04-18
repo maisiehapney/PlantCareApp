@@ -9,6 +9,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -41,6 +45,7 @@ public class ClassifyFragment extends Fragment {
     TextView result, confidence;
     int imageSize = 224;
     private String species, percent;
+    ActivityResultLauncher<Intent> galleryResultLaunch, cameraResultLaunch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +60,56 @@ public class ClassifyFragment extends Fragment {
         confidence = v.findViewById(R.id.confidence);
         imageView = v.findViewById(R.id.imageView);
 
-        camera.setOnClickListener(new View.OnClickListener() {
+        cameraResultLaunch = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == getActivity().RESULT_OK && result.getData()!=null) {
+                            Bitmap image = (Bitmap) result.getData().getExtras().get("data");
+                            int dimension = Math.min(image.getWidth(), image.getHeight());
+                            image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
+                            //imageView.setImageBitmap(image);
+
+                            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
+                            //classifyImage(image);
+                            Classify.classifyImage(image, getActivity().getApplicationContext());
+                            species = Classify.result;
+                            percent = Classify.accuracy;
+                            //result.setText(Classify.result);
+                            openNewActivity();
+                        }
+                    }
+                });
+
+        galleryResultLaunch = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if(result.getResultCode() == getActivity().RESULT_OK && result.getData()!=null) {
+                            Intent data = result.getData();
+                            Uri dat = data.getData();
+                            Bitmap image = null;
+                            try {
+                                image = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), dat);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            //imageView.setImageBitmap(image);
+
+                            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
+                            //classifyImage(image);
+                            Classify.classifyImage(image, getActivity().getApplicationContext());
+                            species = Classify.result;
+                            percent=Classify.accuracy;
+                            //result.setText(Classify.result);
+                            openNewActivity();
+                        }
+                    }
+                });
+
+        /*camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -76,7 +130,22 @@ public class ClassifyFragment extends Fragment {
                 startActivityForResult(cameraIntent, 1);
             }
         });
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment*/
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                cameraResultLaunch.launch(cameraIntent);
+            }
+        });
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryResultLaunch.launch(galleryIntent);
+            }
+        });
 
         return v;
     }
@@ -109,7 +178,7 @@ public class ClassifyFragment extends Fragment {
         getActivity().startActivity(intent);
     }
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode == getActivity().RESULT_OK){
             if(requestCode==3){
@@ -144,5 +213,5 @@ public class ClassifyFragment extends Fragment {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
+    }*/
 }

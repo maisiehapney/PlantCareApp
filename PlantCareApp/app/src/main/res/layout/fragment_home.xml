@@ -21,7 +21,9 @@
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search"
         android:layout_width="match_parent"
-        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
         app:queryHint="Search Here..."
@@ -38,8 +40,8 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:layout_marginTop="20dp"
-        android:visibility="gone"
+        android:visibility="invisible"
+
         />
     
     <androidx.recyclerview.widget.RecyclerView

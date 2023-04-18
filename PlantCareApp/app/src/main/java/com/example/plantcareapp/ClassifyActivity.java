@@ -1,7 +1,12 @@
 package com.example.plantcareapp;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
@@ -35,11 +40,59 @@ public class ClassifyActivity extends AppCompatActivity {
     TextView result;
     int imageSize = 224;
     private String plant;
+    ActivityResultLauncher<Intent> galleryResultLaunch, cameraResultLaunch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classify);
+
+        cameraResultLaunch = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK && result.getData()!=null) {
+                            Bitmap image = (Bitmap) result.getData().getExtras().get("data");
+                            int dimension = Math.min(image.getWidth(), image.getHeight());
+                            image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
+                            imageView.setImageBitmap(image);
+
+                            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
+                            //classifyImage(image);
+                            Classify.classifyImage(image, getApplicationContext());
+                            plant = Classify.result;
+                            //result.setText(Classify.result);
+                            openNewActivity();
+                        }
+                    }
+                });
+
+        galleryResultLaunch = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if(result.getResultCode() == RESULT_OK && result.getData()!=null) {
+                            Intent data = result.getData();
+                            Uri dat = data.getData();
+                            Bitmap image = null;
+                            try {
+                                image = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), dat);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            imageView.setImageBitmap(image);
+
+                            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
+                            //classifyImage(image);
+                            Classify.classifyImage(image, getApplicationContext());
+                            plant = Classify.result;
+                            //result.setText(Classify.result);
+                            openNewActivity();
+                        }
+                    }
+                });
 
         camera = findViewById(R.id.button);
         gallery = findViewById(R.id.button2);
@@ -58,22 +111,26 @@ public class ClassifyActivity extends AppCompatActivity {
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                    //if(ContextCompat.checkSelfPermission(ClassifyActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+                        /*Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraIntent, 3);*/
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, 3);
-                    }else{
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
-                    }
-                }
+                        cameraResultLaunch.launch(cameraIntent);
+                  //  }else{
+                    //    requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+                    //}
+
             }
         });
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cameraIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(cameraIntent, 1);
+                /*Intent cameraIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(cameraIntent, 1);*/
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryResultLaunch.launch(galleryIntent);
+
             }
         });
     }
@@ -89,7 +146,8 @@ public class ClassifyActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    @Override
+
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode == RESULT_OK){
             if(requestCode==3){
@@ -124,5 +182,5 @@ public class ClassifyActivity extends AppCompatActivity {
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
+    }*/
 }
