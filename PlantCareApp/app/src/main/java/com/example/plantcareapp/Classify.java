@@ -57,8 +57,9 @@ public class Classify {
                 }
             }
 
-            String [] classes = {"Boston Fern", "Bunny Ear Cactus", "Chinese Money Plant", "Dragon Tree", "Jade Plant", "Orchid", "Peace Lily", "Peacock Plant",  "Rubber Plant", "Snake Plant"};
-            result = (classes[maxPos]);
+            //String [] classes = {"Boston Fern", "Bunny Ear Cactus", "Chinese Money Plant", "Dragon Tree", "Jade Plant", "Orchid", "Peace Lily", "Peacock Plant",  "Rubber Plant", "Snake Plant"};
+            result = PlantConstants.getPlants().get(maxPos);
+            //result = (classes[maxPos]);
             getAccuracy(maxConfidence);
             //information.setText("More Information");
             //information.setVisibility(View.VISIBLE);

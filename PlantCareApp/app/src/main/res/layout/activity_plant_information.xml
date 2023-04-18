@@ -37,14 +37,15 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
-            app:cardCornerRadius="40dp">
+            app:cardCornerRadius="40dp"
+            app:cardElevation="3dp">
         </androidx.cardview.widget.CardView>
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="320sp"
             android:layout_height="320sp"
-            android:elevation="2dp"
+            android:elevation="4dp"
             android:src="@drawable/plant"
             app:layout_constraintTop_toTopOf="@+id/card"
             app:layout_constraintLeft_toLeftOf="@+id/card"
@@ -55,7 +56,7 @@
             android:id="@+id/loginInformation"
             android:layout_width="280sp"
             android:layout_height="wrap_content"
-            android:elevation="2dp"
+            android:elevation="4dp"
             android:text="Login to unlock full features, including a confidence score, plant care guides, images and more."
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -107,12 +108,14 @@
             android:layout_marginEnd="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
+            android:background="@color/green"
             app:layout_constraintTop_toBottomOf="@+id/confidence"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <TableRow>
+            <TableRow
+                android:layout_margin="2dp">
                 <TextView
                     android:background="@color/green"
                     android:layout_width="0dp"
@@ -123,10 +126,12 @@
                     android:textStyle="bold"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
+
                     />
             </TableRow>
 
-            <TableRow>
+            <TableRow
+                android:layout_margin="2dp">
                 <TextView
                     android:background="@color/grey"
                     android:layout_width="0dp"
@@ -136,6 +141,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:layout_marginRight="2dp"
                     />
 
                 <TextView
@@ -151,7 +157,9 @@
                     />
             </TableRow>
 
-            <TableRow>
+            <TableRow
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp">
                 <TextView
                     android:background="@color/grey"
                     android:layout_width="0dp"
@@ -161,6 +169,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:layout_marginRight="2dp"
                     />
 
                 <TextView
@@ -176,7 +185,8 @@
                     />
             </TableRow>
 
-            <TableRow>
+            <TableRow
+                android:layout_margin="2dp">
                 <TextView
                     android:background="@color/grey"
                     android:layout_width="0dp"
@@ -186,6 +196,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:layout_marginRight="2dp"
                     />
 
                 <TextView
@@ -201,7 +212,9 @@
                     />
             </TableRow>
 
-            <TableRow>
+            <TableRow
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp">
                 <TextView
                     android:background="@color/grey"
                     android:layout_width="0dp"
@@ -211,6 +224,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:layout_marginRight="2dp"
                     />
 
                 <TextView
@@ -226,7 +240,8 @@
                     />
             </TableRow>
 
-            <TableRow>
+            <TableRow
+                android:layout_margin="2dp">
                 <TextView
                     android:background="@color/grey"
                     android:layout_width="0dp"
@@ -236,6 +251,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:layout_marginRight="2dp"
                     />
 
                 <TextView

@@ -70,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
 
                                     Toast.makeText(RegisterActivity.this, "Registration Successful",
-                                            Toast.LENGTH_SHORT).show();
+                                            Toast.LENGTH_LONG).show();
 
                                     Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
                                     startActivity(intent);
@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(RegisterActivity.this, "Registration failed. Try again.",
-                                            Toast.LENGTH_SHORT).show();
+                                            Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

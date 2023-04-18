@@ -56,8 +56,8 @@ public class ClassifyFragment extends Fragment {
         gallery = v.findViewById(R.id.button2);
         //information = v.findViewById(R.id.information_button);
 
-        result = v.findViewById(R.id.result);
-        confidence = v.findViewById(R.id.confidence);
+        //result = v.findViewById(R.id.result);
+        //confidence = v.findViewById(R.id.confidence);
         imageView = v.findViewById(R.id.imageView);
 
         cameraResultLaunch = registerForActivityResult(

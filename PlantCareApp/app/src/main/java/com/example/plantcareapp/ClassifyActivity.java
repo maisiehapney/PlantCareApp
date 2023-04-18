@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.plantcareapp.ml.Model;
+//import com.example.plantcareapp.ml.Model;
 import com.example.plantcareapp.ml.Plantmodel;
 
 import org.tensorflow.lite.DataType;
@@ -96,17 +96,17 @@ public class ClassifyActivity extends AppCompatActivity {
 
         camera = findViewById(R.id.button);
         gallery = findViewById(R.id.button2);
-        register = findViewById(R.id.register_button);
+        //register = findViewById(R.id.register_button);
 
-        result = findViewById(R.id.result);
+        //result = findViewById(R.id.result);
         imageView = findViewById(R.id.imageView);
 
-        register.setOnClickListener(new View.OnClickListener() {
+        /*register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openRegisterActivity();
             }
-        });
+        });*/
 
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
