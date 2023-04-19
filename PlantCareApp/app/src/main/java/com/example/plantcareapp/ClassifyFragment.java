@@ -1,5 +1,7 @@
 package com.example.plantcareapp;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +15,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -26,7 +29,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.plantcareapp.ml.Plantmodel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.collect.Collections2;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
@@ -36,7 +46,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClassifyFragment extends Fragment {
 
@@ -46,11 +58,18 @@ public class ClassifyFragment extends Fragment {
     int imageSize = 224;
     private String species, percent;
     ActivityResultLauncher<Intent> galleryResultLaunch, cameraResultLaunch;
+    FirebaseAuth auth;
+    FirebaseUser user;
+    private FirebaseFirestore db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_classify,container,false);
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
 
         camera = v.findViewById(R.id.button);
         gallery = v.findViewById(R.id.button2);
@@ -103,6 +122,7 @@ public class ClassifyFragment extends Fragment {
                             Classify.classifyImage(image, getActivity().getApplicationContext());
                             species = Classify.result;
                             percent=Classify.accuracy;
+                            uploadResult();
                             //result.setText(Classify.result);
                             openNewActivity();
                         }
@@ -176,6 +196,29 @@ public class ClassifyFragment extends Fragment {
         intent.putExtra("url",plant.imageURL);
         intent.putExtra("confidence",percent);
         getActivity().startActivity(intent);
+    }
+
+    public void uploadResult(){
+        // Add a new document with a generated id.
+        Map<String, Object> data = new HashMap<>();
+        data.put("email", user.getEmail());
+        data.put("plant", species);
+        data.put("date", FieldValue.serverTimestamp());
+
+        db.collection("UserPlants")
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
     /*@Override

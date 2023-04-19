@@ -4,6 +4,9 @@
     <item android:title="Scan"
         android:icon="@drawable/ic_baseline_document_scanner_24"
         android:id="@+id/scan"/>
+    <item android:title="History"
+        android:icon="@drawable/ic_baseline_history_24"
+        android:id="@+id/history"/>
     <item android:title="Home"
         android:icon="@drawable/ic_baseline_home_24"
         android:id="@+id/home"/>

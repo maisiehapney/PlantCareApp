@@ -28,13 +28,15 @@ public class RecylerViewAdapter extends RecyclerView.Adapter<RecylerViewAdapter.
     List<String> plantHumidity;
     List<String> plantImageURL;*/
     Context context;
+    List<Plant> plantList;
+
 
     public RecylerViewAdapter(Context context, ArrayList<Plant> plantList) {
         this.context = context;
         this.plantList = plantList;
     }
 
-    List<Plant> plantList;
+
 
     /*public RecylerViewAdapter(List<String> plantNames, List<String> plantBotanical, List<String> plantTemperature, List<String> plantWater, List<String> plantSunlight, List<String> plantHumidity, List<String> plantImageURL, Context context) {
         this.plantNames = plantNames;

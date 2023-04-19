@@ -35,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     HomeFragment homeFragment = new HomeFragment();
     ProfileFragment profileFragment = new ProfileFragment();
     ClassifyFragment classifyFragment = new ClassifyFragment();
+    HistoryFragment historyFragment = new HistoryFragment();
     ProgressBar progressBar;
     /*private List<String> plantNames;
     private List<String> plantBotanical;
@@ -166,6 +167,9 @@ public class HomeActivity extends AppCompatActivity {
                         return true;
                     case R.id.profile:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame, profileFragment).commit();
+                        return true;
+                    case R.id.history:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frame, historyFragment).commit();
                         return true;
                 }
                 return false;
