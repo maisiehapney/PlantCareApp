@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment {
     private List<String> plantHumidity;
     private List<String> plantImageURL;*/
     ArrayList<Plant> plantArrayList;
-    private List<String> plantNames;
+    //private List<String> plantNames;
     TextView noResults;
 
     @Override
@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
         plantHumidity=((HomeActivity) getActivity()).getHumidity();
         plantImageURL=((HomeActivity) getActivity()).getImageURL();*/
         plantArrayList=((HomeActivity) getActivity()).getPlantArrayList();
-        plantNames=((HomeActivity) getActivity()).getNames();
+        //plantNames=((HomeActivity) getActivity()).getNames();
 
        /* recyclerViewAdapter = new RecylerViewAdapter(plantNames, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL, getActivity());
 
@@ -140,9 +140,9 @@ public class HomeFragment extends Fragment {
 
         List<Plant>updatedPlants = new ArrayList<>();
 
-        for (int i=0; i<plantNames.size(); i++){
+        for (int i=0; i<plantArrayList.size(); i++){
 
-            if(plantNames.get(i).toLowerCase().contains(text.toLowerCase())){
+            if(plantArrayList.get(i).name.toLowerCase().contains(text.toLowerCase())){
                 updatedPlants.add(plantArrayList.get(i));
             }
         }

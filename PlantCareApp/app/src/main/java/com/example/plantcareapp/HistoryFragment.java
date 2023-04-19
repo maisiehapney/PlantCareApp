@@ -75,7 +75,7 @@ public class HistoryFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                //plants.add(document.getString("plant"));
+                                plants.add(document.getString("plant"));
                                 dates.add((DateFormat.getDateInstance().format(document.getTimestamp("date").toDate())).toString());
                                 int plantIndex = ((HomeActivity) getActivity()).getNames().indexOf(document.getString("plant"));
                                 plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(plantIndex));
@@ -162,7 +162,7 @@ public class HistoryFragment extends Fragment {
         layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);
         //COME BACK TO THIS - SEARCHING
-        /*searchView=view.findViewById(R.id.search);
+        searchView=view.findViewById(R.id.search);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -176,7 +176,7 @@ public class HistoryFragment extends Fragment {
                 return true;
             }
 
-        });*/
+        });
 
         //plantNames=((HomeActivity) getActivity()).getNames();
         //plantBotanical=((HomeActivity) getActivity()).getBotanicalNames();
@@ -191,6 +191,48 @@ public class HistoryFragment extends Fragment {
 
 
 
+    }
+
+    private void filterPlants(String text){
+
+        List<Plant>updatedPlants = new ArrayList<>();
+        List<String>updatedDates=new ArrayList<>();
+
+        for (int i=0; i<plantArrayList.size(); i++){
+
+            if(plantArrayList.get(i).name.toLowerCase().contains(text.toLowerCase())){
+                updatedPlants.add(plantArrayList.get(i));
+                updatedDates.add(dates.get(i));
+            }
+        }
+        recyclerViewAdapter.setFilteredPlants(updatedPlants, updatedDates);
+
+        if (updatedPlants.size()<plantArrayList.size()){
+            noResults.setVisibility(View.VISIBLE);
+            noResults.setText(String.valueOf(updatedPlants.size())+" results found.");
+        }
+        else{
+            noResults.setVisibility(View.GONE);
+        }
+
+        /*recyclerViewAdapter.setFilteredPlants(updatedPlants);
+        if(updatedPlants.isEmpty()){
+            noResults.setVisibility(View.VISIBLE);
+        }
+        else{
+            //noResults.setVisibility(View.GONE);
+            noResults.setVisibility(View.VISIBLE);
+            noResults.setText(String.valueOf(updatedPlants.size())+" results found.");
+        }*/
+
+
+        /*if(updatedPlants.isEmpty()){
+            //Deal with
+        }
+        else{
+            recyclerViewAdapter.setFilteredPlants(updatedPlants);
+
+        }*/
     }
 
     }

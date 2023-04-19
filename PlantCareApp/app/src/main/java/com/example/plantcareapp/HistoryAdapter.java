@@ -27,6 +27,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
         this.dates = dates;
     }
 
+    public void setFilteredPlants(List<Plant> newPlantList, List<String> newDates){
+        this.plantList=newPlantList;
+        this.dates=newDates;
+        notifyDataSetChanged();
+    }
 
 
     @NonNull
