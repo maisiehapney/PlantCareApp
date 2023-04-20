@@ -59,6 +59,37 @@ public class HistoryFragment extends Fragment {
 
         View v =inflater.inflate(R.layout.fragment_history, container, false);
 
+
+
+
+        //Toast.makeText(getActivity(), String.valueOf(dates.size()),
+                //Toast.LENGTH_SHORT).show();
+
+        /*for (int i=0; i<plants.size(); i++){
+            for (int j=0;j<plantNames.size();j++){
+                //int index;
+                if (plants.get(i).equals(plantNames.get(j))){
+                    plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
+                    break;
+                }
+            }
+        }
+        Toast.makeText(getActivity(), String.valueOf(plantArrayList.size()),
+                Toast.LENGTH_SHORT).show();*/
+        /*for (int i=0; i<plantNames.size();i++){
+            plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
+            dates.add("date");
+        }*/
+        //plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
+        //dates.add("date");
+
+        // Inflate the layout for this fragment
+        return v;
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -66,7 +97,7 @@ public class HistoryFragment extends Fragment {
         dates = new ArrayList<>();
         plantArrayList=new ArrayList<>();
         plantNames=((HomeActivity) getActivity()).getNames();
-        progressBar=v.findViewById(R.id.progressBar);
+        progressBar=view.findViewById(R.id.progressBar);
         //progressBar.setVisibility(View.VISIBLE);
 
 
@@ -132,39 +163,7 @@ public class HistoryFragment extends Fragment {
                 });
 
 
-        //Toast.makeText(getActivity(), String.valueOf(dates.size()),
-                //Toast.LENGTH_SHORT).show();
-
-        /*for (int i=0; i<plants.size(); i++){
-            for (int j=0;j<plantNames.size();j++){
-                //int index;
-                if (plants.get(i).equals(plantNames.get(j))){
-                    plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
-                    break;
-                }
-            }
-        }
-        Toast.makeText(getActivity(), String.valueOf(plantArrayList.size()),
-                Toast.LENGTH_SHORT).show();*/
-        /*for (int i=0; i<plantNames.size();i++){
-            plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
-            dates.add("date");
-        }*/
-        //plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
-        //dates.add("date");
-
-        // Inflate the layout for this fragment
-        return v;
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        Toast.makeText(getActivity(), String.valueOf(plantArrayList.size()),
-                Toast.LENGTH_SHORT).show();
-
-
-        noResults = view.findViewById(R.id.noSearchResults);
+        noResults = view.findViewById(R.id.searchResults);
         recyclerView = view.findViewById(R.id.recyclerView);
         layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);

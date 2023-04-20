@@ -98,7 +98,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password2" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

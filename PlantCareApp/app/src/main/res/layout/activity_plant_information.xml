@@ -72,7 +72,7 @@
             android:id="@+id/identification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Identified as: Cactus"
+            android:text=""
             android:visibility="gone"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -88,7 +88,7 @@
             android:id="@+id/confidence"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Confidence: High"
+            android:text=""
             android:visibility="gone"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -126,7 +126,6 @@
                     android:textStyle="bold"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
-
                     />
             </TableRow>
 
@@ -141,7 +140,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginEnd="2dp"
                     />
 
                 <TextView
@@ -169,7 +168,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginEnd="2dp"
                     />
 
                 <TextView
@@ -196,7 +195,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginEnd="2dp"
                     />
 
                 <TextView
@@ -224,7 +223,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginEnd="2dp"
                     />
 
                 <TextView
@@ -251,7 +250,7 @@
                     android:textSize="14sp"
                     android:gravity="center_horizontal"
                     android:layout_weight="4"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginEnd="2dp"
                     />
 
                 <TextView
@@ -267,12 +266,8 @@
                     />
             </TableRow>
 
-
         </TableLayout>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 </ScrollView>

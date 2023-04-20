@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
         plantSunlight=((HomeActivity) getActivity()).getSunlight();
         plantHumidity=((HomeActivity) getActivity()).getHumidity();
         plantImageURL=((HomeActivity) getActivity()).getImageURL();*/
-        plantArrayList=((HomeActivity) getActivity()).getPlantArrayList();
+
         //plantNames=((HomeActivity) getActivity()).getNames();
 
        /* recyclerViewAdapter = new RecylerViewAdapter(plantNames, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL, getActivity());
@@ -68,7 +68,8 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        noResults = view.findViewById(R.id.noSearchResults);
+        plantArrayList=((HomeActivity) getActivity()).getPlantArrayList();
+        noResults = view.findViewById(R.id.searchResults);
         recyclerView = view.findViewById(R.id.recyclerView);
         layoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(layoutManager);

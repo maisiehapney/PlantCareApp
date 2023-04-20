@@ -39,9 +39,6 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_profile,container,false);
 
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-
         return v;
     }
 
@@ -49,6 +46,8 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
         logoutButton = view.findViewById(R.id.logout);
         resetButton=view.findViewById(R.id.resetButton);
         userEmail = view.findViewById(R.id.userEmail);
@@ -56,7 +55,7 @@ public class ProfileFragment extends Fragment {
         editTextPassword = view.findViewById(R.id.resetPassword);
         editTextPassword2=view.findViewById(R.id.resetPassword2);
         userEmail.setText(user.getEmail());
-        reset=view.findViewById(R.id.reset);
+        reset=view.findViewById(R.id.resetDropdown);
         //boolean resetShowing = false;
 
         reset.setOnClickListener(new View.OnClickListener() {

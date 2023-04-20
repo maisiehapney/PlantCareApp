@@ -17,17 +17,17 @@
         app:cardElevation="3dp">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/plantImage"
             android:layout_height="120dp"
             android:layout_width="120dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:src="@drawable/ic_baseline_person_24"
+            android:src="@drawable/plant"
             />
 
         <TextView
-            android:id="@+id/textView"
-            android:text="Boston Fern"
+            android:id="@+id/plantName"
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -36,6 +36,7 @@
             android:textStyle="bold"
             android:textColor="#000000"
             />
+
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>

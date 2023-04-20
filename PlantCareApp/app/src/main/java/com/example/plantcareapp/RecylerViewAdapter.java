@@ -135,8 +135,8 @@ public class RecylerViewAdapter extends RecyclerView.Adapter<RecylerViewAdapter.
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView=itemView.findViewById(R.id.textView);
-            imageView=itemView.findViewById(R.id.imageView);
+            textView=itemView.findViewById(R.id.plantName);
+            imageView=itemView.findViewById(R.id.plantImage);
         }
     }
 }

@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context=".ClassifyFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,8 +36,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title"
             app:cardCornerRadius="40dp"
-            app:cardElevation="3dp"
-            >
+            app:cardElevation="3dp">
         </androidx.cardview.widget.CardView>
 
         <ImageView
@@ -60,7 +58,7 @@
             app:constraint_referenced_ids="card" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/photoButton"
             android:layout_width="140dp"
             android:layout_height="48dp"
             android:layout_centerInParent="true"
@@ -74,11 +72,11 @@
             app:cornerRadius="16dp"
             app:layout_constraintBottom_toTopOf="@+id/barrier2"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/button2"
+            app:layout_constraintRight_toLeftOf="@+id/uploadButton"
             app:layout_constraintTop_toBottomOf="@+id/barrier" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/uploadButton"
             android:layout_width="140dp"
             android:layout_height="48dp"
             android:layout_centerInParent="true"
@@ -91,7 +89,7 @@
             android:textSize="16sp"
             app:cornerRadius="16dp"
             app:layout_constraintBottom_toTopOf="@+id/barrier2"
-            app:layout_constraintLeft_toRightOf="@+id/button"
+            app:layout_constraintLeft_toRightOf="@+id/photoButton"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/barrier" />
 
@@ -100,7 +98,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="button, button2" />
+            app:constraint_referenced_ids="photoButton, uploadButton" />
+
         <TableLayout
             android:id="@+id/tipsTable"
             android:layout_width="390dp"
@@ -189,10 +188,7 @@
             </TableRow>
 
         </TableLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
 </ScrollView>

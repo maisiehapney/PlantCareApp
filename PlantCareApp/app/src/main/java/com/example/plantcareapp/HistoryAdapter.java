@@ -81,9 +81,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView=itemView.findViewById(R.id.textView);
-            textview2=itemView.findViewById(R.id.textView2);
-            imageView=itemView.findViewById(R.id.imageView);
+            textView=itemView.findViewById(R.id.plantName);
+            textview2=itemView.findViewById(R.id.plantDate);
+            imageView=itemView.findViewById(R.id.plantImage);
         }
     }
 }

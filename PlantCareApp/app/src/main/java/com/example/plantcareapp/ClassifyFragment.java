@@ -72,9 +72,7 @@ public class ClassifyFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_classify,container,false);
 
-        auth = FirebaseAuth.getInstance();
-        user = auth.getCurrentUser();
-        db = FirebaseFirestore.getInstance();
+
 
 
 
@@ -85,8 +83,11 @@ public class ClassifyFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        camera = view.findViewById(R.id.button);
-        gallery = view.findViewById(R.id.button2);
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        camera = view.findViewById(R.id.photoButton);
+        gallery = view.findViewById(R.id.uploadButton);
         //information = v.findViewById(R.id.information_button);
 
         //result = v.findViewById(R.id.result);

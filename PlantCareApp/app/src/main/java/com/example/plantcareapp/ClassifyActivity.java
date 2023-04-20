@@ -94,8 +94,8 @@ public class ClassifyActivity extends AppCompatActivity {
                     }
                 });
 
-        camera = findViewById(R.id.button);
-        gallery = findViewById(R.id.button2);
+        camera = findViewById(R.id.photoButton);
+        gallery = findViewById(R.id.uploadButton);
         //register = findViewById(R.id.register_button);
 
         //result = findViewById(R.id.result);

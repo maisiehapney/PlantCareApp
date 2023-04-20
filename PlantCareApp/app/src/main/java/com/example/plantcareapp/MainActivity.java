@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
 
-        startButton=findViewById(R.id.start_button);
+        startButton=findViewById(R.id.guest_button);
         loginButton=findViewById(R.id.login_button);
 
         startButton.setOnClickListener(new View.OnClickListener() {
