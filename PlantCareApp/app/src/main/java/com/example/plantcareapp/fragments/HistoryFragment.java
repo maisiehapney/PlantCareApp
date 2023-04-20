@@ -1,6 +1,5 @@
-package com.example.plantcareapp;
+package com.example.plantcareapp.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,8 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.plantcareapp.activities.HomeActivity;
+import com.example.plantcareapp.models.Plant;
+import com.example.plantcareapp.R;
+import com.example.plantcareapp.adapters.HistoryAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -149,7 +151,7 @@ public class HistoryFragment extends Fragment {
 
         for (int i=0; i<plantArrayList.size(); i++){
 
-            if(plantArrayList.get(i).name.toLowerCase().contains(text.toLowerCase())){
+            if(plantArrayList.get(i).getName().toLowerCase().contains(text.toLowerCase())){
                 updatedPlants.add(plantArrayList.get(i));
                 updatedDates.add(dates.get(i));
             }

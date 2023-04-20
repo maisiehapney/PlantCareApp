@@ -1,8 +1,9 @@
-package com.example.plantcareapp;
+package com.example.plantcareapp.helpers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.example.plantcareapp.constants.PlantConstants;
 import com.example.plantcareapp.ml.Plantmodel;
 
 import org.tensorflow.lite.DataType;

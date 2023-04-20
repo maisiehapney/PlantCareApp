@@ -1,4 +1,4 @@
-package com.example.plantcareapp;
+package com.example.plantcareapp.constants;
 
 import java.util.ArrayList;
 import java.util.Arrays;

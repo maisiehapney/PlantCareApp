@@ -1,11 +1,11 @@
-package com.example.plantcareapp;
+package com.example.plantcareapp.models;
 
 import android.util.Log;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class Plant {
-    String name, botanicalName, temperature, water, sunlight, humidity, imageURL;
+    private String name, botanicalName, temperature, water, sunlight, humidity, imageURL;
 
     public Plant(){}
 

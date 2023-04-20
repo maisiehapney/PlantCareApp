@@ -1,4 +1,4 @@
-package com.example.plantcareapp;
+package com.example.plantcareapp.fragments;
 
 import android.os.Bundle;
 
@@ -13,7 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.plantcareapp.models.Plant;
+import com.example.plantcareapp.R;
+import com.example.plantcareapp.activities.HomeActivity;
+import com.example.plantcareapp.adapters.HomeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +26,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    RecylerViewAdapter recyclerViewAdapter;
+    HomeAdapter recyclerViewAdapter;
     //private SearchView searchView;
     private androidx.appcompat.widget.SearchView searchView;
     ArrayList<Plant> plantArrayList;
@@ -73,7 +77,7 @@ public class HomeFragment extends Fragment {
 
         });
 
-        recyclerViewAdapter = new RecylerViewAdapter(getActivity(), plantArrayList);
+        recyclerViewAdapter = new HomeAdapter(getActivity(), plantArrayList);
 
         recyclerView.setAdapter(recyclerViewAdapter);
 
@@ -88,7 +92,7 @@ public class HomeFragment extends Fragment {
 
         for (int i=0; i<plantArrayList.size(); i++){
 
-            if(plantArrayList.get(i).name.toLowerCase().contains(text.toLowerCase())){
+            if(plantArrayList.get(i).getName().toLowerCase().contains(text.toLowerCase())){
                 updatedPlants.add(plantArrayList.get(i));
             }
         }

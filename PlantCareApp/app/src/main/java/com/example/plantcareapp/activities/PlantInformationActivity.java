@@ -1,4 +1,4 @@
-package com.example.plantcareapp;
+package com.example.plantcareapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.plantcareapp.R;
 
 public class PlantInformationActivity extends AppCompatActivity {
 

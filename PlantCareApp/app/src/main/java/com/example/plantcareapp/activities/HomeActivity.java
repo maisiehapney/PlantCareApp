@@ -1,4 +1,4 @@
-package com.example.plantcareapp;
+package com.example.plantcareapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.plantcareapp.fragments.HomeFragment;
+import com.example.plantcareapp.models.Plant;
+import com.example.plantcareapp.fragments.ProfileFragment;
+import com.example.plantcareapp.R;
+import com.example.plantcareapp.fragments.ClassifyFragment;
+import com.example.plantcareapp.fragments.HistoryFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -42,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        if (navigationView.getSelectedItemId()==R.id.home){
+        if (navigationView.getSelectedItemId()== R.id.home){
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);

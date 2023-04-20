@@ -1,16 +1,11 @@
-package com.example.plantcareapp;
+package com.example.plantcareapp.fragments;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -29,30 +24,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.plantcareapp.ml.Plantmodel;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.plantcareapp.activities.HomeActivity;
+import com.example.plantcareapp.models.Plant;
+import com.example.plantcareapp.activities.PlantInformationActivity;
+import com.example.plantcareapp.R;
+import com.example.plantcareapp.helpers.Classify;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.common.collect.Collections2;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
-
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ClassifyFragment extends Fragment {
@@ -173,13 +160,13 @@ public class ClassifyFragment extends Fragment {
         Intent intent = new Intent (getActivity(), PlantInformationActivity.class);
         int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(species);
         Plant plant = ((HomeActivity) getActivity()).getPlantArrayList().get(plantIndex);
-        intent.putExtra("name",plant.name);
-        intent.putExtra("botanical",plant.botanicalName);
-        intent.putExtra("temperature",plant.temperature);
-        intent.putExtra("water",plant.water);
-        intent.putExtra("sunlight",plant.sunlight);
-        intent.putExtra("humidity",plant.humidity);
-        intent.putExtra("url",plant.imageURL);
+        intent.putExtra("name",plant.getName());
+        intent.putExtra("botanical",plant.getBotanicalName());
+        intent.putExtra("temperature",plant.getTemperature());
+        intent.putExtra("water",plant.getWater());
+        intent.putExtra("sunlight",plant.getSunlight());
+        intent.putExtra("humidity",plant.getHumidity());
+        intent.putExtra("url",plant.getImageURL());
         intent.putExtra("confidence",percent);
         getActivity().startActivity(intent);
     }
