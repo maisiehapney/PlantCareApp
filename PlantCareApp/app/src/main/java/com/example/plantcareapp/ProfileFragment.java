@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +31,7 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth auth;
     FirebaseUser user;
     Button logoutButton, deleteButton, resetButton;
-    TextView userEmail;
+    TextView userEmail, reset;
     EditText editTextPassword, editTextPassword2;
 
     @Override
@@ -38,15 +41,42 @@ public class ProfileFragment extends Fragment {
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        logoutButton = v.findViewById(R.id.logout);
-        resetButton=v.findViewById(R.id.resetButton);
-        userEmail = v.findViewById(R.id.userEmail);
-        deleteButton = v.findViewById(R.id.delete);
-        editTextPassword = v.findViewById(R.id.resetPassword);
-        editTextPassword2=v.findViewById(R.id.resetPassword2);
 
+        return v;
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        logoutButton = view.findViewById(R.id.logout);
+        resetButton=view.findViewById(R.id.resetButton);
+        userEmail = view.findViewById(R.id.userEmail);
+        deleteButton = view.findViewById(R.id.delete);
+        editTextPassword = view.findViewById(R.id.resetPassword);
+        editTextPassword2=view.findViewById(R.id.resetPassword2);
         userEmail.setText(user.getEmail());
+        reset=view.findViewById(R.id.reset);
+        //boolean resetShowing = false;
+
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(editTextPassword.getVisibility()!=View.VISIBLE){
+                    editTextPassword.setVisibility(View.VISIBLE);
+                    editTextPassword2.setVisibility(View.VISIBLE);
+                    resetButton.setVisibility(View.VISIBLE);
+                    reset.setText("Click to hide");
+                }
+                else if(editTextPassword.getVisibility()==View.VISIBLE){
+                    editTextPassword.setVisibility(View.GONE);
+                    editTextPassword2.setVisibility(View.GONE);
+                    resetButton.setVisibility(View.GONE);
+                    reset.setText("Click to reset password");
+                }
+
+            }
+        });
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,8 +112,8 @@ public class ProfileFragment extends Fragment {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getActivity(), "Password reset.",
                                             Toast.LENGTH_SHORT).show();
-                                    editTextPassword.setText("");
-                                    editTextPassword2.setText("");
+                                    editTextPassword.getText().clear();
+                                    editTextPassword2.getText().clear();
                                 }
                                 else{
                                     Toast.makeText(getActivity(), "Error resetting. Try again later.",
@@ -132,6 +162,9 @@ public class ProfileFragment extends Fragment {
                 alertDialogBuilder.create().show();
             }
         });
-        return v;
+
+
+
+
     }
 }

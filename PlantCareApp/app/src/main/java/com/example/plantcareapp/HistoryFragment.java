@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ public class HistoryFragment extends Fragment {
     HistoryAdapter recyclerViewAdapter;
     private androidx.appcompat.widget.SearchView searchView;
     TextView noResults;
+    ProgressBar progressBar;
 
 
 
@@ -64,6 +66,8 @@ public class HistoryFragment extends Fragment {
         dates = new ArrayList<>();
         plantArrayList=new ArrayList<>();
         plantNames=((HomeActivity) getActivity()).getNames();
+        progressBar=v.findViewById(R.id.progressBar);
+        //progressBar.setVisibility(View.VISIBLE);
 
 
         db.collection("UserPlants")
@@ -92,6 +96,7 @@ public class HistoryFragment extends Fragment {
                                 //Toast.makeText(getActivity(), results.get(1),
                                 //Toast.LENGTH_SHORT).show();
                             }
+                            progressBar.setVisibility(View.GONE);
                             recyclerViewAdapter = new HistoryAdapter(getActivity(), plantArrayList, dates);
 
                             recyclerView.setAdapter(recyclerViewAdapter);
@@ -126,6 +131,7 @@ public class HistoryFragment extends Fragment {
                     }
                 });
 
+
         //Toast.makeText(getActivity(), String.valueOf(dates.size()),
                 //Toast.LENGTH_SHORT).show();
 
@@ -157,6 +163,7 @@ public class HistoryFragment extends Fragment {
         Toast.makeText(getActivity(), String.valueOf(plantArrayList.size()),
                 Toast.LENGTH_SHORT).show();
 
+
         noResults = view.findViewById(R.id.noSearchResults);
         recyclerView = view.findViewById(R.id.recyclerView);
         layoutManager = new GridLayoutManager(getActivity(), 2);
@@ -177,6 +184,7 @@ public class HistoryFragment extends Fragment {
             }
 
         });
+        //progressBar.setVisibility(View.GONE);
 
         //plantNames=((HomeActivity) getActivity()).getNames();
         //plantBotanical=((HomeActivity) getActivity()).getBotanicalNames();
