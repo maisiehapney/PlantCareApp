@@ -101,24 +101,13 @@ public class ClassifyActivity extends AppCompatActivity {
         //result = findViewById(R.id.result);
         imageView = findViewById(R.id.imageView);
 
-        /*register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openRegisterActivity();
-            }
-        });*/
 
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    //if(ContextCompat.checkSelfPermission(ClassifyActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
-                        /*Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, 3);*/
+
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         cameraResultLaunch.launch(cameraIntent);
-                  //  }else{
-                    //    requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
-                    //}
 
             }
         });
@@ -126,18 +115,12 @@ public class ClassifyActivity extends AppCompatActivity {
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent cameraIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(cameraIntent, 1);*/
+
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 galleryResultLaunch.launch(galleryIntent);
 
             }
         });
-    }
-
-    public void openRegisterActivity() {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
     }
 
     public void openNewActivity(){
@@ -146,41 +129,4 @@ public class ClassifyActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode == RESULT_OK){
-            if(requestCode==3){
-                Bitmap image = (Bitmap) data.getExtras().get("data");
-                int dimension = Math.min(image.getWidth(), image.getHeight());
-                image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
-                imageView.setImageBitmap(image);
-
-                image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-                //classifyImage(image);
-                Classify.classifyImage(image, getApplicationContext());
-                plant = Classify.result;
-                result.setText(Classify.result);
-                openNewActivity();
-            }else{
-                Uri dat = data.getData();
-                Bitmap image = null;
-                try {
-                    image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                imageView.setImageBitmap(image);
-
-                image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-                //classifyImage(image);
-                Classify.classifyImage(image, getApplicationContext());
-                plant = Classify.result;
-                result.setText(Classify.result);
-                openNewActivity();
-
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }*/
 }

@@ -50,8 +50,16 @@ public class HistoryFragment extends Fragment {
     TextView noResults;
     ProgressBar progressBar;
 
+    public HistoryFragment(){}
 
+    public static HistoryFragment newInstance() {
+        return new HistoryFragment();
+    }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,31 +67,6 @@ public class HistoryFragment extends Fragment {
 
         View v =inflater.inflate(R.layout.fragment_history, container, false);
 
-
-
-
-        //Toast.makeText(getActivity(), String.valueOf(dates.size()),
-                //Toast.LENGTH_SHORT).show();
-
-        /*for (int i=0; i<plants.size(); i++){
-            for (int j=0;j<plantNames.size();j++){
-                //int index;
-                if (plants.get(i).equals(plantNames.get(j))){
-                    plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
-                    break;
-                }
-            }
-        }
-        Toast.makeText(getActivity(), String.valueOf(plantArrayList.size()),
-                Toast.LENGTH_SHORT).show();*/
-        /*for (int i=0; i<plantNames.size();i++){
-            plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
-            dates.add("date");
-        }*/
-        //plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
-        //dates.add("date");
-
-        // Inflate the layout for this fragment
         return v;
     }
     @Override
@@ -115,14 +98,6 @@ public class HistoryFragment extends Fragment {
                                 int plantIndex = ((HomeActivity) getActivity()).getNames().indexOf(document.getString("plant"));
                                 plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(plantIndex));
 
-                                /*for (int i=0; i<plantNames.size();i++){
-                                    if(plantNames.get(i).equals(document.getString("plant"))){
-                                        plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(i));
-                                    }
-                                }*/
-
-                                //result.setText(results.get(1));
-
                                 Log.d("tag", document.getId() + " => " + document.getData());
                                 //Toast.makeText(getActivity(), results.get(1),
                                 //Toast.LENGTH_SHORT).show();
@@ -133,27 +108,9 @@ public class HistoryFragment extends Fragment {
                             recyclerView.setAdapter(recyclerViewAdapter);
 
                             recyclerView.setHasFixedSize(true);
-                            /*for (int i=0; i<plants.size(); i++){
-                                for (int j=0;j<plantNames.size();j++){
-                                    //int index;
-                                    if (plants.get(i).equals(plantNames.get(j))){
-                                        plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(j));
-                                        break;
-                                    }
-                                }
-                            }*/
 
-                            /*for (int i=0; i<plants.size();i++){
-                                plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(0));
-                                //dates.add("date");
-                            }*/
-                            //result.setText(results.get(3));
-                            //Toast.makeText(HomeActivity.this, "Got data",
-                            //Toast.LENGTH_SHORT).show();
-                            //progressBar.setVisibility(View.GONE);
-                            //getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
                         } else {
-                            //progressBar.setVisibility(View.GONE);
+
                             /*Toast.makeText(HomeActivity.this, "Connect to internet and try again.",
                                     Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(HomeActivity.this, MainActivity.class);
@@ -183,21 +140,6 @@ public class HistoryFragment extends Fragment {
             }
 
         });
-        //progressBar.setVisibility(View.GONE);
-
-        //plantNames=((HomeActivity) getActivity()).getNames();
-        //plantBotanical=((HomeActivity) getActivity()).getBotanicalNames();
-        //plantTemperature=((HomeActivity) getActivity()).getTemperature();
-        //plantWater=((HomeActivity) getActivity()).getWater();
-        // plantSunlight=((HomeActivity) getActivity()).getSunlight();
-        //plantHumidity=((HomeActivity) getActivity()).getHumidity();
-        //plantImageURL=((HomeActivity) getActivity()).getImageURL();
-
-        //recyclerViewAdapter = new RecylerViewAdapter(plantNames, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL, getActivity());
-
-
-
-
     }
 
     private void filterPlants(String text){
@@ -222,24 +164,6 @@ public class HistoryFragment extends Fragment {
             noResults.setVisibility(View.GONE);
         }
 
-        /*recyclerViewAdapter.setFilteredPlants(updatedPlants);
-        if(updatedPlants.isEmpty()){
-            noResults.setVisibility(View.VISIBLE);
-        }
-        else{
-            //noResults.setVisibility(View.GONE);
-            noResults.setVisibility(View.VISIBLE);
-            noResults.setText(String.valueOf(updatedPlants.size())+" results found.");
-        }*/
-
-
-        /*if(updatedPlants.isEmpty()){
-            //Deal with
-        }
-        else{
-            recyclerViewAdapter.setFilteredPlants(updatedPlants);
-
-        }*/
     }
 
-    }
+}

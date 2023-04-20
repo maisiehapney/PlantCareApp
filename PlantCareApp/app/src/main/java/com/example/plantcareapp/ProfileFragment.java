@@ -34,12 +34,24 @@ public class ProfileFragment extends Fragment {
     TextView userEmail, reset;
     EditText editTextPassword, editTextPassword2;
 
+
+    public ProfileFragment(){}
+
+    public static ProfileFragment newInstance() {
+        return new ProfileFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_profile,container,false);
 
         return v;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override

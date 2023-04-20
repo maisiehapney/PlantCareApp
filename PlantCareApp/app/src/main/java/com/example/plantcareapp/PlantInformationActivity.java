@@ -31,7 +31,6 @@ public class PlantInformationActivity extends AppCompatActivity {
         loginInfo=findViewById(R.id.loginInformation);
         identification=findViewById(R.id.identification);
 
-
         Bundle extras=getIntent().getExtras();
         String plantName=extras.getString("name");
         String plantBotanical=extras.getString("botanical");
@@ -41,11 +40,6 @@ public class PlantInformationActivity extends AppCompatActivity {
         String plantHumidity=extras.getString("humidity");
         String plantURL = extras.getString("url");
         String plantConfidence = extras.getString("confidence");
-
-        //String url = "https://www.tutorialspoint.com/images/tp-logo-diamond.png";
-        /*Glide.with(this)
-                .load(plantURL)
-                .into(plantImage);*/
 
         name.setText(plantName);
         if(plantBotanical!=null && plantTemperature!=null && plantWater!=null && plantSunlight!=null &&plantHumidity!=null &&plantURL!=null){
@@ -74,18 +68,6 @@ public class PlantInformationActivity extends AppCompatActivity {
             identification.setText("Identified as: "+plantName);
             identification.setVisibility(View.VISIBLE);
         }
-        /*botanical.setText(plantBotanical);
-        temperature.setText(plantTemperature);
-        water.setText(plantWater);
-        sunlight.setText(plantSunlight);
-        humidity.setText(plantHumidity);
-        if (plantConfidence != null){
-            confidence.setText("Confidence: "+plantConfidence);
-            confidence.setVisibility(View.VISIBLE);
-        }
-        else{
-            confidence.setVisibility(View.GONE);
-        }*/
 
     }
 }

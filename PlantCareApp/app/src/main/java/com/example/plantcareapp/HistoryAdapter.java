@@ -46,7 +46,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
     public void onBindViewHolder(@NonNull HistoryAdapter.MyViewHolder holder, int position) {
         Plant plant = plantList.get(position);
 
-        holder.textView.setText(plant.name);
+        holder.textView.setText(plant.getName());
         holder.textview2.setText(dates.get(position));
         Glide.with(context)
                 .load(plant.imageURL)
@@ -55,13 +55,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, PlantInformationActivity.class);
-                intent.putExtra("name",plant.name);
-                intent.putExtra("botanical",plant.botanicalName);
-                intent.putExtra("temperature",plant.temperature);
-                intent.putExtra("water",plant.water);
-                intent.putExtra("sunlight",plant.sunlight);
-                intent.putExtra("humidity",plant.humidity);
-                intent.putExtra("url",plant.imageURL);
+                intent.putExtra("name",plant.getName());
+                intent.putExtra("botanical",plant.getBotanicalName());
+                intent.putExtra("temperature",plant.getTemperature());
+                intent.putExtra("water",plant.getWater());
+                intent.putExtra("sunlight",plant.getSunlight());
+                intent.putExtra("humidity",plant.getHumidity());
+                intent.putExtra("url",plant.getImageURL());
                 context.startActivity(intent);
             }
         });

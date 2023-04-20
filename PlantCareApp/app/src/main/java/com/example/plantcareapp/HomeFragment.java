@@ -25,16 +25,19 @@ public class HomeFragment extends Fragment {
     RecylerViewAdapter recyclerViewAdapter;
     //private SearchView searchView;
     private androidx.appcompat.widget.SearchView searchView;
-   /* private List<String> plantNames;
-    private List<String> plantBotanical;
-    private List<String> plantTemperature;
-    private List<String> plantWater;
-    private List<String> plantSunlight;
-    private List<String> plantHumidity;
-    private List<String> plantImageURL;*/
     ArrayList<Plant> plantArrayList;
-    //private List<String> plantNames;
     TextView noResults;
+
+    public HomeFragment(){}
+
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,25 +45,6 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_home,container,false);
 
-        /*recyclerView = v.findViewById(R.id.recyclerView);
-        layoutManager = new GridLayoutManager(getActivity(), 2);
-        recyclerView.setLayoutManager(layoutManager);*/
-
-        /*plantNames=((HomeActivity) getActivity()).getNames();
-        plantBotanical=((HomeActivity) getActivity()).getBotanicalNames();
-        plantTemperature=((HomeActivity) getActivity()).getTemperature();
-        plantWater=((HomeActivity) getActivity()).getWater();
-        plantSunlight=((HomeActivity) getActivity()).getSunlight();
-        plantHumidity=((HomeActivity) getActivity()).getHumidity();
-        plantImageURL=((HomeActivity) getActivity()).getImageURL();*/
-
-        //plantNames=((HomeActivity) getActivity()).getNames();
-
-       /* recyclerViewAdapter = new RecylerViewAdapter(plantNames, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL, getActivity());
-
-        recyclerView.setAdapter(recyclerViewAdapter);
-
-        recyclerView.setHasFixedSize(true);*/
         return v;
     }
 
@@ -89,16 +73,6 @@ public class HomeFragment extends Fragment {
 
         });
 
-        //plantNames=((HomeActivity) getActivity()).getNames();
-        //plantBotanical=((HomeActivity) getActivity()).getBotanicalNames();
-        //plantTemperature=((HomeActivity) getActivity()).getTemperature();
-        //plantWater=((HomeActivity) getActivity()).getWater();
-       // plantSunlight=((HomeActivity) getActivity()).getSunlight();
-        //plantHumidity=((HomeActivity) getActivity()).getHumidity();
-        //plantImageURL=((HomeActivity) getActivity()).getImageURL();
-
-        //recyclerViewAdapter = new RecylerViewAdapter(plantNames, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL, getActivity());
-
         recyclerViewAdapter = new RecylerViewAdapter(getActivity(), plantArrayList);
 
         recyclerView.setAdapter(recyclerViewAdapter);
@@ -107,35 +81,6 @@ public class HomeFragment extends Fragment {
 
 
     }
-   /* private void filterPlants(String text){
-        List<String>updatedPlantNames = new ArrayList<>();
-        List<String> updatedPlantBotanical= new ArrayList<>();
-        List<String> updatedPlantTemperature= new ArrayList<>();
-        List<String> updatedPlantWater= new ArrayList<>();
-        List<String> updatedPlantSunlight= new ArrayList<>();
-        List<String> updatedPlantHumidity= new ArrayList<>();
-        List<String>updatedPlantImageURL = new ArrayList<>();
-
-        for (int i=0; i<plantNames.size(); i++){
-            if(plantNames.get(i).toLowerCase().contains(text.toLowerCase())){
-                updatedPlantNames.add(plantNames.get(i));
-                updatedPlantImageURL.add(plantImageURL.get(i));
-                updatedPlantBotanical.add(plantBotanical.get(i));
-                updatedPlantTemperature.add(plantTemperature.get(i));
-                updatedPlantWater.add(plantWater.get(i));
-                updatedPlantSunlight.add(plantSunlight.get(i));
-                updatedPlantHumidity.add(plantHumidity.get(i));
-            }
-        }
-
-        if(updatedPlantNames.isEmpty()){
-            //Deal with
-        }
-        else{
-            recyclerViewAdapter.setFilteredPlants(updatedPlantNames,updatedPlantBotanical,updatedPlantTemperature, updatedPlantWater,updatedPlantSunlight, updatedPlantHumidity, updatedPlantImageURL);
-
-        }
-    }*/
 
     private void filterPlants(String text){
 
@@ -157,23 +102,5 @@ public class HomeFragment extends Fragment {
             noResults.setVisibility(View.GONE);
         }
 
-        /*recyclerViewAdapter.setFilteredPlants(updatedPlants);
-        if(updatedPlants.isEmpty()){
-            noResults.setVisibility(View.VISIBLE);
-        }
-        else{
-            //noResults.setVisibility(View.GONE);
-            noResults.setVisibility(View.VISIBLE);
-            noResults.setText(String.valueOf(updatedPlants.size())+" results found.");
-        }*/
-
-
-        /*if(updatedPlants.isEmpty()){
-            //Deal with
-        }
-        else{
-            recyclerViewAdapter.setFilteredPlants(updatedPlants);
-
-        }*/
     }
 }
