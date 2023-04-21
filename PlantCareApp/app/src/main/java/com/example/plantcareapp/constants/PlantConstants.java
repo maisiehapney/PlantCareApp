@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Constant plant values used as the 10 classes for plant classification throughout application
+ */
 public class PlantConstants {
+
     private static List<String> plants;
 
     public static List<String> getPlants(){

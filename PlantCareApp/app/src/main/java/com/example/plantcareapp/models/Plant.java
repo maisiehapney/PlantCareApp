@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+/**
+ * Plant model containing information relating to plants
+ */
 public class Plant {
     private String name, botanicalName, temperature, water, sunlight, humidity, imageURL;
 
@@ -18,6 +21,8 @@ public class Plant {
         this.humidity = humidity;
         this.imageURL = imageURL;
     }
+
+    // Getters and setters
 
     public String getName() {
         return name;

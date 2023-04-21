@@ -16,8 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-//import com.example.plantcareapp.ml.Model;
 import com.example.plantcareapp.R;
 import com.example.plantcareapp.helpers.Classify;
 
@@ -25,17 +23,33 @@ import java.io.IOException;
 
 public class ClassifyActivity extends AppCompatActivity {
 
-    Button camera, gallery, register;
-    ImageView imageView;
-    TextView result;
-    int imageSize = 224;
+    private Button camera, gallery;
+    private int imageSize = 224;
     private String plant;
-    ActivityResultLauncher<Intent> galleryResultLaunch, cameraResultLaunch;
+    private ActivityResultLauncher<Intent> galleryResultLaunch, cameraResultLaunch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classify);
+        camera = findViewById(R.id.photoButton);
+        gallery = findViewById(R.id.uploadButton);
+
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cameraResultLaunch.launch(new Intent(MediaStore.ACTION_IMAGE_CAPTURE));
+
+            }
+        });
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                galleryResultLaunch.launch(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
+
+            }
+        });
 
         cameraResultLaunch = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -46,7 +60,6 @@ public class ClassifyActivity extends AppCompatActivity {
                             Bitmap image = (Bitmap) result.getData().getExtras().get("data");
                             int dimension = Math.min(image.getWidth(), image.getHeight());
                             image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
-                            imageView.setImageBitmap(image);
 
                             image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
                             //classifyImage(image);
@@ -72,45 +85,15 @@ public class ClassifyActivity extends AppCompatActivity {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            imageView.setImageBitmap(image);
 
                             image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-                            //classifyImage(image);
                             Classify.classifyImage(image, getApplicationContext());
                             plant = Classify.result;
-                            //result.setText(Classify.result);
                             openNewActivity();
                         }
                     }
                 });
 
-        camera = findViewById(R.id.photoButton);
-        gallery = findViewById(R.id.uploadButton);
-        //register = findViewById(R.id.register_button);
-
-        //result = findViewById(R.id.result);
-        imageView = findViewById(R.id.imageView);
-
-
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        cameraResultLaunch.launch(cameraIntent);
-
-            }
-        });
-
-        gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                galleryResultLaunch.launch(galleryIntent);
-
-            }
-        });
     }
 
     public void openNewActivity(){

@@ -1,22 +1,26 @@
 package com.example.plantcareapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import com.example.plantcareapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Main activity opened when user starts the application
+ * Allows user to sign in or continue as guest
+ */
 public class MainActivity extends AppCompatActivity {
 
     private Button startButton, loginButton;
+    private FirebaseAuth auth;
 
-    FirebaseAuth mAuth;
-
+    /**
+     * Exits application on pressing back button
+     */
     @Override
     public void onBackPressed(){
         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -24,11 +28,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Checks if user is already signed in on starting activity and displays relevant activity
+     */
     @Override
     public void onStart() {
-
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = auth.getCurrentUser();
         if(currentUser != null){
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             startActivity(intent);
@@ -36,37 +41,30 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    /**
+     * Executes when activity is created - retrieves items and sets relevant listeners
+     * @param savedInstanceState bundle object passed to onCreate
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
-
+        auth = FirebaseAuth.getInstance();
         startButton=findViewById(R.id.guest_button);
         loginButton=findViewById(R.id.login_button);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openClassifyActivity();
+                startActivity(new Intent(MainActivity.this, ClassifyActivity.class));
             }
         });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openLoginActivity();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
-    }
-
-    public void openClassifyActivity() {
-        Intent intent = new Intent(this, ClassifyActivity.class);
-        startActivity(intent);
-    }
-
-    public void openLoginActivity() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
     }
 }

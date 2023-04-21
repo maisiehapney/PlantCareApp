@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class Classify {
-    private static int imageSize =224;
+    private static int imageSize = 224;
     public static String result, accuracy;
 
     public static void classifyImage(Bitmap image, Context ctx){

@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
     HistoryFragment historyFragment = new HistoryFragment();
     ProgressBar progressBar;
     ArrayList<Plant> plantArrayList;
-    private List<String> plantNames;
+    private ArrayList<String> plantNames;
 
     @Override
     public void onBackPressed(){
@@ -73,7 +73,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         plantNames = new ArrayList<>();
-        plantArrayList=new ArrayList<Plant>();
+        plantArrayList=new ArrayList<>();
 
         //Might not need this
         if(user==null){
