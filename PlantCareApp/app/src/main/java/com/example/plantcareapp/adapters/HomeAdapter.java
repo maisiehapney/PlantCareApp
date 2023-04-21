@@ -19,37 +19,45 @@ import com.example.plantcareapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * HomeAdapter holds data to populate grid recycler view
+ */
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
-    Context context;
-    List<Plant> plantList;
+    private Context context;
+    private ArrayList<Plant> plantList;
 
-
+    // Constructor gets data from HomeFragment
     public HomeAdapter(Context context, ArrayList<Plant> plantList) {
         this.context = context;
         this.plantList = plantList;
     }
 
-    public void setFilteredPlants(List<Plant> newPlantList){
-        this.plantList=newPlantList;
-        notifyDataSetChanged();
-    }
-
+    /**
+     * Inflates layout for each item in recycler view
+     */
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_card, parent, false);
         MyViewHolder myViewHolder = new MyViewHolder(view);
-        return myViewHolder; //come back to this - video
+        return myViewHolder;
     }
 
+    /**
+     * Each item is bound to view and displayed at specified position
+     * Listeners are also set on each item to open new activity with plant information extras
+     */
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Plant plant = plantList.get(position);
 
-        holder.textView.setText(plant.getName());
+        // Set plant name and image
+        holder.plantName.setText(plant.getName());
         Glide.with(context)
                 .load(plant.getImageURL())
-                .into(holder.imageView);
+                .into(holder.plantImage);
+
+        // Set on click listener that sends selected plant data to next activity
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,24 +72,38 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
                 context.startActivity(intent);
             }
         });
-
     }
 
+    /**
+     * Gets the number of items in the recycler view
+     * @return number of items in recycler view
+     */
     @Override
     public int getItemCount() {
 
         return plantList.size();
     }
 
+    /**
+     * Sets view layout for each item
+     */
     public class MyViewHolder extends RecyclerView.ViewHolder
     {
-        TextView textView;
-        ImageView imageView;
+        TextView plantName;
+        ImageView plantImage;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView=itemView.findViewById(R.id.plantName);
-            imageView=itemView.findViewById(R.id.plantImage);
+            plantName=itemView.findViewById(R.id.plantName);
+            plantImage=itemView.findViewById(R.id.plantImage);
         }
+    }
+
+    /**
+     * Gets updated data when search view is used
+     */
+    public void setFilteredPlants(ArrayList<Plant> newPlantList){
+        this.plantList=newPlantList;
+        notifyDataSetChanged();
     }
 }

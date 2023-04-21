@@ -20,47 +20,68 @@ import com.example.plantcareapp.activities.HomeActivity;
 import com.example.plantcareapp.adapters.HomeAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
+
+/**
+ * Home fragment
+ * Displays all of the plants in the database
+ */
 public class HomeFragment extends Fragment {
-
     private RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    HomeAdapter recyclerViewAdapter;
-    //private SearchView searchView;
+    private HomeAdapter recyclerViewAdapter;
     private androidx.appcompat.widget.SearchView searchView;
-    ArrayList<Plant> plantArrayList;
-    TextView noResults;
+    private ArrayList<Plant> plantArrayList;
+    private TextView numberOfResults;
 
+    // Required public empty constructor
     public HomeFragment(){}
 
+    /**
+     * Create new instance of HomeFragment
+     * @return a new instance of HomeFragment
+     */
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
 
+    /**
+     * Executes when fragment is created
+     * @param savedInstanceState bundle object passed to onCreate
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Inflate layout once fragment has been created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_home,container,false);
-
         return v;
     }
 
+    /**
+     * Retrieves items and sets listeners once view has been created
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        plantArrayList=((HomeActivity) getActivity()).getPlantArrayList();
-        noResults = view.findViewById(R.id.searchResults);
+        numberOfResults = view.findViewById(R.id.searchResults);
         recyclerView = view.findViewById(R.id.recyclerView);
-        layoutManager = new GridLayoutManager(getActivity(), 2);
-        recyclerView.setLayoutManager(layoutManager);
+
+        // Gets plant data
+        plantArrayList=((HomeActivity) getActivity()).getPlantArrayList();
+
+        // Sets up recycler view with 2 columns in grid format
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerViewAdapter = new HomeAdapter(getActivity(), plantArrayList);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setHasFixedSize(true);
+
+        // Sets up search view to filter results
         searchView=view.findViewById(R.id.search);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -74,37 +95,34 @@ public class HomeFragment extends Fragment {
                 filterPlants(newText);
                 return true;
             }
-
         });
-
-        recyclerViewAdapter = new HomeAdapter(getActivity(), plantArrayList);
-
-        recyclerView.setAdapter(recyclerViewAdapter);
-
-        recyclerView.setHasFixedSize(true);
-
-
     }
 
+    /**
+     * Method to filter plants based on search bar input
+     * @param text search view input
+     */
     private void filterPlants(String text){
 
-        List<Plant>updatedPlants = new ArrayList<>();
+        ArrayList<Plant>updatedPlants = new ArrayList<>();
 
+        // Find if search view input matches any plants
         for (int i=0; i<plantArrayList.size(); i++){
 
             if(plantArrayList.get(i).getName().toLowerCase().contains(text.toLowerCase())){
                 updatedPlants.add(plantArrayList.get(i));
             }
         }
+        // Update recycler view
         recyclerViewAdapter.setFilteredPlants(updatedPlants);
 
+        // Update text displaying number of results upon searching
         if (updatedPlants.size()<plantArrayList.size()){
-            noResults.setVisibility(View.VISIBLE);
-            noResults.setText(String.valueOf(updatedPlants.size())+" results found.");
+            numberOfResults.setVisibility(View.VISIBLE);
+            numberOfResults.setText(String.valueOf(updatedPlants.size())+" results found.");
         }
         else{
-            noResults.setVisibility(View.GONE);
+            numberOfResults.setVisibility(View.GONE);
         }
-
     }
 }

@@ -1,5 +1,6 @@
 package com.example.plantcareapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.plantcareapp.activities.HomeActivity;
 import com.example.plantcareapp.models.Plant;
@@ -33,44 +35,56 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * History fragment
+ * Displays users' previous classification results
+ */
 public class HistoryFragment extends Fragment {
-    FirebaseAuth auth;
-    FirebaseUser user;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
     private FirebaseFirestore db;
-    private List<String> plants;
-    private List<String> dates;//testing
+    private ArrayList<String> dates;//testing
     private ArrayList<Plant> plantArrayList;
-    private List<String> plantNames;
-
-    TextView result;
-    //COPIED FROM HOME
     private RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    HistoryAdapter recyclerViewAdapter;
+    private HistoryAdapter recyclerViewAdapter;
     private androidx.appcompat.widget.SearchView searchView;
-    TextView noResults;
-    ProgressBar progressBar;
+    private TextView numberOfResults;
+    private ProgressBar progressBar;
 
+    // Required public empty constructor
     public HistoryFragment(){}
 
+    /**
+     * Create new instance of HistoryFragment
+     * @return a new instance of HistoryFragment
+     */
     public static HistoryFragment newInstance() {
         return new HistoryFragment();
     }
 
+    /**
+     * Executes when fragment is created
+     * @param savedInstanceState bundle object passed to onCreate
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Inflate layout once fragment has been created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View v =inflater.inflate(R.layout.fragment_history, container, false);
-
         return v;
     }
+
+    /**
+     * Retrieves items and sets listeners once view has been created
+     * Also retrieves user history data from Firebase
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -78,14 +92,29 @@ public class HistoryFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
-        plants = new ArrayList<>(); //testing
         dates = new ArrayList<>();
         plantArrayList=new ArrayList<>();
-        plantNames=((HomeActivity) getActivity()).getNames();
         progressBar=view.findViewById(R.id.progressBar);
-        //progressBar.setVisibility(View.VISIBLE);
+        numberOfResults = view.findViewById(R.id.searchResults);
+        recyclerView = view.findViewById(R.id.recyclerView);
 
+        // Gets users previous classification results from database
+        getPlantHistory();
 
+        // Sets up recycler view with 2 columns in grid format
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+
+        // Sets up search view to filter results
+        searchView=view.findViewById(R.id.search);
+        searchView.clearFocus();
+
+    }
+
+    /**
+     * Method to get users plant history
+     * Queries database to find entries with current user's email, then sorts resulting plants by date
+     */
+    private void getPlantHistory(){
         db.collection("UserPlants")
                 .whereEqualTo("email", user.getEmail())
                 .orderBy("date", Query.Direction.DESCENDING)
@@ -95,77 +124,65 @@ public class HistoryFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                plants.add(document.getString("plant"));
-                                dates.add((DateFormat.getDateInstance().format(document.getTimestamp("date").toDate())).toString());
+                                // For each result, get corresponding plant data and store in plantArrayList
+                                // Also store date of each result
                                 int plantIndex = ((HomeActivity) getActivity()).getNames().indexOf(document.getString("plant"));
                                 plantArrayList.add(((HomeActivity) getActivity()).getPlantArrayList().get(plantIndex));
-
-                                Log.d("tag", document.getId() + " => " + document.getData());
-                                //Toast.makeText(getActivity(), results.get(1),
-                                //Toast.LENGTH_SHORT).show();
+                                dates.add((DateFormat.getDateInstance().format(document.getTimestamp("date").toDate())).toString());
                             }
+
+                            // Dismiss progress bar, display recycler view of users plant history and set up search view
                             progressBar.setVisibility(View.GONE);
                             recyclerViewAdapter = new HistoryAdapter(getActivity(), plantArrayList, dates);
-
                             recyclerView.setAdapter(recyclerViewAdapter);
-
                             recyclerView.setHasFixedSize(true);
-
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    return false;
+                                }
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    filterPlants(newText);
+                                    return true;
+                                }
+                            });
                         } else {
-
-                            /*Toast.makeText(HomeActivity.this, "Connect to internet and try again.",
-                                    Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                            startActivity(intent);*/
+                            // Failed to get data - dismiss progress bar and display toast message
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "Connect to internet and try again.",
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 });
-
-
-        noResults = view.findViewById(R.id.searchResults);
-        recyclerView = view.findViewById(R.id.recyclerView);
-        layoutManager = new GridLayoutManager(getActivity(), 2);
-        recyclerView.setLayoutManager(layoutManager);
-        //COME BACK TO THIS - SEARCHING
-        searchView=view.findViewById(R.id.search);
-        searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterPlants(newText);
-                return true;
-            }
-
-        });
     }
 
+    /**
+     * Method to filter plants based on search bar input
+     * @param text search view input
+     */
     private void filterPlants(String text){
 
-        List<Plant>updatedPlants = new ArrayList<>();
-        List<String>updatedDates=new ArrayList<>();
+        ArrayList<Plant>updatedPlants=new ArrayList<>();
+        ArrayList<String>updatedDates=new ArrayList<>();
 
+        // Find if search view input matches any plants
         for (int i=0; i<plantArrayList.size(); i++){
-
             if(plantArrayList.get(i).getName().toLowerCase().contains(text.toLowerCase())){
                 updatedPlants.add(plantArrayList.get(i));
                 updatedDates.add(dates.get(i));
             }
         }
+        // Update recycler view
         recyclerViewAdapter.setFilteredPlants(updatedPlants, updatedDates);
 
+        // Update text displaying number of results upon searching
         if (updatedPlants.size()<plantArrayList.size()){
-            noResults.setVisibility(View.VISIBLE);
-            noResults.setText(String.valueOf(updatedPlants.size())+" results found.");
+            numberOfResults.setVisibility(View.VISIBLE);
+            numberOfResults.setText(String.valueOf(updatedPlants.size())+" results found.");
         }
         else{
-            noResults.setVisibility(View.GONE);
+            numberOfResults.setVisibility(View.GONE);
         }
-
     }
-
 }
