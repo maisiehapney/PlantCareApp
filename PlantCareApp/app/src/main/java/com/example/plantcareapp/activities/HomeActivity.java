@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -21,8 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,20 +28,25 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Home activity which all fragments are attached to
+ * Retrieves plant data from database, controls fragments and application navigation
+ */
 public class HomeActivity extends AppCompatActivity {
 
-    FirebaseAuth auth;
-    FirebaseUser user;
     private FirebaseFirestore db;
-    BottomNavigationView navigationView;
-    HomeFragment homeFragment = new HomeFragment();
-    ProfileFragment profileFragment = new ProfileFragment();
-    ClassifyFragment classifyFragment = new ClassifyFragment();
-    HistoryFragment historyFragment = new HistoryFragment();
-    ProgressBar progressBar;
-    ArrayList<Plant> plantArrayList;
+    private BottomNavigationView navigationView;
+    private HomeFragment homeFragment = new HomeFragment();
+    private ProfileFragment profileFragment = new ProfileFragment();
+    private ClassifyFragment classifyFragment = new ClassifyFragment();
+    private HistoryFragment historyFragment = new HistoryFragment();
+    private ProgressBar progressBar;
+    private ArrayList<Plant> plantArrayList;
     private ArrayList<String> plantNames;
 
+    /**
+     * If user is on home fragment and back is pressed, exit application to device home screen
+     */
     @Override
     public void onBackPressed(){
         if (navigationView.getSelectedItemId()== R.id.home){
@@ -55,71 +58,26 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Executes when activity is created - retrieves items, gets plant data from database and sets up navigation menu
+     * @param savedInstanceState bundle object passed to onCreate
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        /*if(savedInstanceState==null){
-
-        }*/
-
         db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-        user= auth.getCurrentUser();
         navigationView = findViewById(R.id.bottomNavigationView);
         navigationView.setSelectedItemId(R.id.home);
         progressBar=findViewById(R.id.progressBar);
-
-
         plantNames = new ArrayList<>();
         plantArrayList=new ArrayList<>();
-
-        //Might not need this
-        if(user==null){
-            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-            startActivity(intent);
-
-        }
-
         progressBar.setVisibility(View.VISIBLE);
 
-        db.collection("Plants").orderBy("name")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+        // Get plant data from database
+        getPlantData();
 
-                                String plantName = document.getString("name");
-                                String plantBotanical = document.getString("botanicalName");
-                                String plantTemperature = document.getString("temperature");
-                                String plantWater = document.getString("water");
-                                String plantSunlight = document.getString("sunlight");
-                                String plantHumidity = document.getString("humidity");
-                                String plantImageURL = document.getString("imageURL");
-
-                                plantNames.add(plantName);
-                                plantArrayList.add(new Plant(plantName, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL));
-
-                                Log.d("tag", document.getId() + " => " + document.getData());
-
-                            }
-
-                            progressBar.setVisibility(View.GONE);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
-
-                        } else {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(HomeActivity.this, "Connect to internet and try again.",
-                                    Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-
+        // Set up navigation menu for navigating between fragments
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -140,14 +98,54 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
     }
 
+    private void getPlantData(){
+        db.collection("Plants").orderBy("name")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // Data successfully retrieved - store data
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String plantName = document.getString("name");
+                                String plantBotanical = document.getString("botanicalName");
+                                String plantTemperature = document.getString("temperature");
+                                String plantWater = document.getString("water");
+                                String plantSunlight = document.getString("sunlight");
+                                String plantHumidity = document.getString("humidity");
+                                String plantImageURL = document.getString("imageURL");
+                                plantNames.add(plantName);
+                                plantArrayList.add(new Plant(plantName, plantBotanical, plantTemperature, plantWater, plantSunlight, plantHumidity, plantImageURL));
+                            }
+                            // Dismiss progress bar and inflate home fragment
+                            progressBar.setVisibility(View.GONE);
+                            getSupportFragmentManager().beginTransaction().replace(R.id.frame, homeFragment).commit();
+
+                        } else {
+                            // Failed to get data - dismiss progress bar, display toast message and exit to main activity
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(HomeActivity.this, "Connect to internet and try again.",
+                                    Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(HomeActivity.this, MainActivity.class));
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Method for getting plant information
+     * @return plant type arraylist storing all plant information
+     */
     public ArrayList<Plant> getPlantArrayList() {
         return plantArrayList;
     }
 
+    /**
+     * Method used for indexing plants by name
+     * @return string arraylist storing all plant names
+     */
     public List<String> getNames() {
         return plantNames;
     }

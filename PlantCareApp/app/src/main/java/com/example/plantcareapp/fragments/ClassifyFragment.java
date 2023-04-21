@@ -44,9 +44,8 @@ import java.util.Map;
 
 public class ClassifyFragment extends Fragment {
 
-    Button camera, gallery, information;
+    Button camera, gallery;
     ImageView imageView;
-    TextView result, confidence;
     int imageSize = 224;
     private String species, percent;
     ActivityResultLauncher<Intent> galleryResultLaunch, cameraResultLaunch;
@@ -82,10 +81,6 @@ public class ClassifyFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         camera = view.findViewById(R.id.photoButton);
         gallery = view.findViewById(R.id.uploadButton);
-        //information = v.findViewById(R.id.information_button);
-
-        //result = v.findViewById(R.id.result);
-        //confidence = v.findViewById(R.id.confidence);
         imageView = view.findViewById(R.id.imageView);
 
         cameraResultLaunch = registerForActivityResult(

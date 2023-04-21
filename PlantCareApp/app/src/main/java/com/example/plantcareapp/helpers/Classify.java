@@ -14,12 +14,12 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class Classify {
-    private static int imageSize = 224;
+    private final static int imageSize = 224;
     public static String result, accuracy;
 
     public static void classifyImage(Bitmap image, Context ctx){
         try {
-            //Model model = Model.newInstance(getApplicationContext());
+
             Plantmodel model = Plantmodel.newInstance(ctx);
 
             // Creates inputs for reference.
@@ -58,16 +58,9 @@ public class Classify {
                 }
             }
 
-            //String [] classes = {"Boston Fern", "Bunny Ear Cactus", "Chinese Money Plant", "Dragon Tree", "Jade Plant", "Orchid", "Peace Lily", "Peacock Plant",  "Rubber Plant", "Snake Plant"};
             result = PlantConstants.getPlants().get(maxPos);
-            //result = (classes[maxPos]);
             getAccuracy(maxConfidence);
-            //information.setText("More Information");
-            //information.setVisibility(View.VISIBLE);
-            //getAccuracy(maxConfidence);
-            //species = classes[maxPos];
-            //int plantIndex=((HomeActivity) getActivity()).getNames().indexOf(classes[maxPos]);
-            //Log.d("tag", ((HomeActivity) getActivity()).getInfo().get(plantIndex));
+
 
             // Releases model resources if no longer used.
             model.close();

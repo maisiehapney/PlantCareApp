@@ -10,17 +10,22 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.plantcareapp.R;
 
+/**
+ * Activity for displaying plant information and care guides
+ */
 public class PlantInformationActivity extends AppCompatActivity {
 
-    TextView name, botanical, temperature, water, sunlight, humidity, confidence, loginInfo, identification;
-    ImageView plantImage;
+    private TextView name, botanical, temperature, water, sunlight, humidity, confidence, loginInfo, identification;
+    private ImageView plantImage;
 
+    /**
+     * Executes when activity is created - retrieves items and displays information
+     * @param savedInstanceState bundle object passed to onCreate
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_information);
-
-        //information = findViewById(R.id.info);
         name = findViewById(R.id.title);
         botanical = findViewById(R.id.botanical);
         temperature = findViewById(R.id.temperature);
@@ -32,6 +37,12 @@ public class PlantInformationActivity extends AppCompatActivity {
         loginInfo=findViewById(R.id.loginInformation);
         identification=findViewById(R.id.identification);
 
+        displayPlantInformation();
+    }
+
+    private void displayPlantInformation(){
+
+        // Get extras from previous activity
         Bundle extras=getIntent().getExtras();
         String plantName=extras.getString("name");
         String plantBotanical=extras.getString("botanical");
@@ -42,7 +53,10 @@ public class PlantInformationActivity extends AppCompatActivity {
         String plantURL = extras.getString("url");
         String plantConfidence = extras.getString("confidence");
 
+        // Set plant name
         name.setText(plantName);
+
+        // Display information if not null - values will be null for guest classification results
         if(plantBotanical!=null && plantTemperature!=null && plantWater!=null && plantSunlight!=null &&plantHumidity!=null &&plantURL!=null){
             Glide.with(this)
                     .load(plantURL)
@@ -52,23 +66,23 @@ public class PlantInformationActivity extends AppCompatActivity {
             water.setText(plantWater);
             sunlight.setText(plantSunlight);
             humidity.setText(plantHumidity);
+
+            // If plant confidence is not null display confidence of classification
             if (plantConfidence != null){
                 confidence.setText("Confidence: "+plantConfidence);
                 confidence.setVisibility(View.VISIBLE);
-                //name.setText("Identified as: " + plantName);
                 identification.setText("Identified as: "+plantName);
                 identification.setVisibility(View.VISIBLE);
             }
+            // Else hide confidence - classification has not been made
             else{
                 confidence.setVisibility(View.GONE);
-                //name.setText(plantName);
             }
+         // Display login information to guest users
         }else{
             loginInfo.setVisibility(View.VISIBLE);
-            //name.setText("Identified as: " + plantName);
             identification.setText("Identified as: "+plantName);
             identification.setVisibility(View.VISIBLE);
         }
-
     }
 }
