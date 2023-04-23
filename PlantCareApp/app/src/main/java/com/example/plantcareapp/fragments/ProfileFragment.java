@@ -178,6 +178,7 @@ public class ProfileFragment extends Fragment {
     private void logoutUser(){
         auth.signOut();
         startActivity(new Intent(getActivity(), MainActivity.class));
+        getActivity().finish();
     }
 
     /**
@@ -200,13 +201,14 @@ public class ProfileFragment extends Fragment {
                                         if (task.isSuccessful()) {
                                             // Delete account successful - display toast message and return to main activity
                                             Toast.makeText(getActivity(), "Account successfully deleted.",
-                                                    Toast.LENGTH_SHORT).show();
+                                                    Toast.LENGTH_LONG).show();
                                             Intent intent = new Intent(getActivity(), MainActivity.class);
                                             startActivity(intent);
+                                            getActivity().finish();
                                         }else{
                                             // Delete account failed - display toast message.
                                             Toast.makeText(getActivity(), "Error deleting. Try again later.",
-                                                    Toast.LENGTH_SHORT).show();
+                                                    Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });

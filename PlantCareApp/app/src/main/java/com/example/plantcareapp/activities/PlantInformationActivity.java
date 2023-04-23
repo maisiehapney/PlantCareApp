@@ -36,10 +36,12 @@ public class PlantInformationActivity extends AppCompatActivity {
         confidence=findViewById(R.id.confidence);
         loginInfo=findViewById(R.id.loginInformation);
         identification=findViewById(R.id.identification);
-
         displayPlantInformation();
     }
 
+    /**
+     * Method to display correct plant information depending on information received
+     */
     private void displayPlantInformation(){
 
         // Get extras from previous activity
