@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class HistoryFragment extends Fragment {
         db.collection("UserPlants")
                 .whereEqualTo("email", user.getEmail())
                 .orderBy("date", Query.Direction.DESCENDING)
-                .get()
+                .get(Source.SERVER) // Only get data if online
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -133,25 +134,31 @@ public class HistoryFragment extends Fragment {
 
                             // Dismiss progress bar, display recycler view of users plant history and set up search view
                             progressBar.setVisibility(View.GONE);
-                            recyclerViewAdapter = new HistoryAdapter(getActivity(), plantArrayList, dates);
-                            recyclerView.setAdapter(recyclerViewAdapter);
-                            recyclerView.setHasFixedSize(true);
-                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                                @Override
-                                public boolean onQueryTextSubmit(String query) {
-                                    return false;
-                                }
-                                @Override
-                                public boolean onQueryTextChange(String newText) {
-                                    filterPlants(newText);
-                                    return true;
-                                }
-                            });
+                            if (plantArrayList.size()>0){
+                                recyclerViewAdapter = new HistoryAdapter(getActivity(), plantArrayList, dates);
+                                recyclerView.setAdapter(recyclerViewAdapter);
+                                recyclerView.setHasFixedSize(true);
+                                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                    @Override
+                                    public boolean onQueryTextSubmit(String query) {
+                                        return false;
+                                    }
+                                    @Override
+                                    public boolean onQueryTextChange(String newText) {
+                                        filterPlants(newText);
+                                        return true;
+                                    }
+                                });
+                            }else{
+                                // If there are no results, display message
+                                numberOfResults.setVisibility(View.VISIBLE);
+                                numberOfResults.setText("No history to show.");
+                            }
                         } else {
                             // Failed to get data - dismiss progress bar and display toast message
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getActivity(), "Connect to internet and try again.",
-                                    Toast.LENGTH_LONG).show();
+                            numberOfResults.setVisibility(View.VISIBLE);
+                            numberOfResults.setText("History could not be loaded.\n Connect to the internet and try again.");
                         }
                     }
                 });

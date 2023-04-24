@@ -162,6 +162,7 @@ public class ProfileFragment extends Fragment {
                                     Toast.LENGTH_LONG).show();
                             editTextPassword.getText().clear();
                             editTextPassword2.getText().clear();
+                            showReset();
                         }
                         else{
                             // Reset password failed - display toast message
