@@ -20,7 +20,7 @@ Option 1 (Recommended):
 Option 2:
 1.	Clone the GitHub repository. 
 2.	Open ‘PlantCareApp’ in Android Studio.
-3.	Connect your Android device to the laptop/pc via USB.
+3.	Connect your Android device to the laptop/pc via USB.<br>
 a.	Alternatively, you can download a device emulator in Android Studio. Upon successfully downloading an emulator, proceed to step 5.
 4.	Enable USB debugging on your Android device, under Developer settings.
 5.	Select your device in Android Studio.
